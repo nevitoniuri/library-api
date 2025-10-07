@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: library-api
+
+server:
+  error:
+    include-stacktrace: NEVER
+    include-exception: false
+    include-message: ALWAYS
+    include-binding-errors: NEVER
