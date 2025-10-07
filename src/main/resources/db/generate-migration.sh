@@ -18,7 +18,7 @@ fi
 MIGRATION_NAME=$1
 
 # Gera o timestamp em milissegundos
-TIMESTAMP=$(date +%s%3N)
+TIMESTAMP=$(python3 -c 'import time; print(int(time.time() * 1000))')
 
 # Nome do arquivo
 FILENAME="${TIMESTAMP}-${MIGRATION_NAME}.sql"
