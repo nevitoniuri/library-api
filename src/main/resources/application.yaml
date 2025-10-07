@@ -1,7 +1,9 @@
 spring:
   application:
     name: library-api
-
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 server:
   error:
     include-stacktrace: NEVER
