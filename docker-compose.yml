@@ -10,6 +10,6 @@ services:
       - POSTGRES_PASSWORD=library
     restart: on-failure
     volumes:
-      - library-data:/var/lib/postgresql
+      - library-data:/var/lib/postgresql/data
 volumes:
   library-data:
