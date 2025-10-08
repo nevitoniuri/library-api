@@ -24,7 +24,10 @@ TIMESTAMP=$(python3 -c 'import time; print(int(time.time() * 1000))')
 FILENAME="${TIMESTAMP}-${MIGRATION_NAME}.sql"
 FILEPATH="${MIGRATIONS_DIR}/${FILENAME}"
 
-# Cria o arquivo com o template
+# Cria o diretório de migrations, caso não exista
+mkdir -p "$MIGRATIONS_DIR"
+
+# Cria o arquivo com o template padrão
 cat > "$FILEPATH" << EOF
 --liquibase formatted sql
 --changeset author:${TIMESTAMP}
