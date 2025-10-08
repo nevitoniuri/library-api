@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  library:
+    image: postgres:18-alpine
+    ports:
+      - "5437:5432"
+    environment:
+      - POSTGRES_DB=library
+      - POSTGRES_USER=library
+      - POSTGRES_PASSWORD=library
+    restart: on-failure
+    volumes:
+      - library-data:/var/lib/postgresql/data
+volumes:
+  library-data:
