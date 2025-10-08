@@ -9,7 +9,7 @@ Crie um banco de dados local de acordo com as configurações definidas no arqui
 `src/main/resources/application.yaml`
 
 ### Caso esteja usando Docker
-Na raiz do projeto execute o comando `docker-compose up -d`
+Na raiz do projeto execute o comando `docker-compose up -d` para subir um container de um banco local PostgreSQL.
 
 
 ## Criando Migrations
