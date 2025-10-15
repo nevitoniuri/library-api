@@ -1,64 +1,63 @@
 -- liquibase formatted sql
 
--- Habilita a extensão para gerar UUIDs no PostgreSQL
+-- Enable the extension to generate UUIDs in PostgreSQL
 -- changeset library_team:1
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Criação da tabela de usuários
+-- Create users table
 -- changeset library_team:2
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    nome VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
-    ativo BOOLEAN DEFAULT TRUE,
-    criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    password VARCHAR(255) NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Criação da tabela de funcionários
+-- Create employees table
 -- changeset library_team:3
-CREATE TABLE IF NOT EXISTS funcionarios (
+CREATE TABLE IF NOT EXISTS employees (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    nome VARCHAR(255) NOT NULL,
-    matricula VARCHAR(50) NOT NULL UNIQUE,
-    senha VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    registration_number VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
-    cargo VARCHAR(100),
-    ativo BOOLEAN DEFAULT TRUE,
-    criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    position VARCHAR(100),
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Criação de índices
+-- Create indexes
 -- changeset library_team:4
-CREATE INDEX IF NOT EXISTS idx_usuarios_email ON usuarios(email);
-CREATE INDEX IF NOT EXISTS idx_funcionarios_matricula ON funcionarios(matricula);
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_employees_registration ON employees(registration_number);
 
--- Comentários para documentação
+-- Documentation comments
 -- changeset library_team:5
-COMMENT ON TABLE usuarios IS 'Tabela de usuários do sistema';
-COMMENT ON COLUMN usuarios.senha IS 'Senha deve ser armazenada usando hash seguro (ex: BCrypt)';
-COMMENT ON TABLE funcionarios IS 'Tabela de funcionários da biblioteca';
-COMMENT ON COLUMN funcionarios.senha IS 'Senha deve ser armazenada usando hash seguro (ex: BCrypt)';
+COMMENT ON TABLE users IS 'System users table';
+COMMENT ON COLUMN users.password IS 'Password should be stored using secure hash (e.g., BCrypt)';
+COMMENT ON TABLE employees IS 'Library employees table';
+COMMENT ON COLUMN employees.password IS 'Password should be stored using secure hash (e.g., BCrypt)';
 
--- Criação da função para atualizar timestamps
+-- Create function to update timestamps
 -- changeset library_team:6 splitStatements:false
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $BODY$
 BEGIN
-    NEW.atualizado_em = NOW();
+    NEW.updated_at = NOW();
     RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
 
--- Criação das triggers
+-- Create triggers
 -- changeset library_team:7
-CREATE OR REPLACE TRIGGER update_usuarios_updated_at
-BEFORE UPDATE ON usuarios
+CREATE OR REPLACE TRIGGER update_users_updated_at
+BEFORE UPDATE ON users
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
--- changeset library_team:8
-CREATE OR REPLACE TRIGGER update_funcionarios_updated_at
-BEFORE UPDATE ON funcionarios
+CREATE OR REPLACE TRIGGER update_employees_updated_at
+BEFORE UPDATE ON employees
 FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
