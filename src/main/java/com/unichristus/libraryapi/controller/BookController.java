@@ -8,7 +8,6 @@ import com.unichristus.libraryapi.service.BookService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
