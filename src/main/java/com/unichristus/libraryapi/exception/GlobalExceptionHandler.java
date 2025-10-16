@@ -19,8 +19,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorResponseDTO> handleServiceException(ServiceException ex) {
         log.error("ServiceException: {}", ex.getMessage(), ex);
+        String description = ex.getError().getDescription();
+        if (ex.getParameters() != null) {
+            for (Object parameter : ex.getParameters()) {
+                description = description.replaceFirst("\\{}", parameter.toString());
+            }
+        }
         return ResponseEntity.status(ex.getError().getHttpStatus())
-                .body(new ErrorResponseDTO(ex.getError().getCode(), ex.getError().getDescription()));
+                .body(new ErrorResponseDTO(ex.getError().getCode(), description));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
