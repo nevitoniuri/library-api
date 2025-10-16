@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -33,8 +34,8 @@ public class Book {
     @Column(name = "number_of_pages", nullable = false)
     private Integer numberOfPages;
 
-    @Column(name = "published_year", nullable = false, length = 4)
-    private String publishedYear;
+    @Column(name = "publication_date", nullable = false)
+    private LocalDate publicationDate;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
