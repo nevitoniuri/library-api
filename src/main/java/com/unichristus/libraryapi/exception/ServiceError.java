@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 public enum ServiceError {
     GENERIC_ERROR("GENERIC_ERROR", HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro, tente novamente mais tarde."),
     BOOK_NOT_FOUND("BOOK_NOT_FOUND", HttpStatus.NOT_FOUND, "Livro não encontrado: {}"),
-    ISBN_ALREADY_EXISTS("ISBN_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe um livro cadastrado com o ISBN: {}")
+    USER_NOT_FOUND("USER_NOT_FOUND", HttpStatus.NOT_FOUND, "Usuário não encontrado: {}"),
+    ISBN_ALREADY_EXISTS("ISBN_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe um livro cadastrado com o ISBN: {}"),
+    READING_ALREADY_EXISTS("READING_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe uma leitura cadastrada para o usuário: {} e o livro: {}"),
+
     ;
 
     private final String code;
