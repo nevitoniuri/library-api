@@ -1,6 +1,8 @@
 package com.unichristus.libraryapi.controller;
 
+import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.model.dto.UserDTO;
+import com.unichristus.libraryapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
