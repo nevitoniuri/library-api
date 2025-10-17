@@ -1,6 +1,9 @@
 spring:
   application:
     name: library-api
+  jpa:
+    hibernate:
+      ddl-auto: validate
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
