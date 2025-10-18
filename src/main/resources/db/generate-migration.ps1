@@ -32,4 +32,3 @@ $Content = @"
 Set-Content -Path $FilePath -Value $Content -Encoding UTF8
 
 Write-Host "✅ Migration criada com sucesso!"
-Write-Host "📁 Arquivo: $FilePath"
