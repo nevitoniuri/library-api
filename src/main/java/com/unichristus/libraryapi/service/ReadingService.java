@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,18 +23,27 @@ public class ReadingService {
     private final BookService bookService;
     private final UserService userService;
 
-    public List<Reading> getReadingsByUser(UUID userId) {
+    public Reading findReadingByIdOrThrow(UUID readingId) {
+        return readingRepository.findById(readingId)
+                .orElseThrow(() -> new ServiceException(ServiceError.READING_NOT_FOUND, readingId));
+    }
+
+    public List<Reading> getReadingsByUserOrderedByLastReadedAtDesc(UUID userId) {
         User user = userService.findUserByIdOrThrow(userId);
-        return readingRepository.findReadingsByUser(user);
+        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user);
+    }
+
+    private Optional<Reading> findByUserAndBook(User user, Book book) {
+        return readingRepository.findByUserAndBook(user, book);
     }
 
     public Reading startReading(UUID bookId, UUID userId) {
         User user = userService.findUserByIdOrThrow(userId);
         Book book = bookService.findBookByIdOrThrow(bookId);
         LocalDateTime now = LocalDateTime.now();
-        if (readingRepository.existsReadingByUserAndBook(user, book)) {
+        findByUserAndBook(user, book).ifPresent(reading -> {
             throw new ServiceException(ServiceError.READING_ALREADY_EXISTS, userId, bookId);
-        }
+        });
         Reading reading = Reading.builder()
                 .book(book)
                 .user(user)
@@ -43,6 +53,24 @@ public class ReadingService {
                 .lastReadedAt(now)
                 .build();
         return readingRepository.save(reading);
+    }
+
+    public void updateReadingProgress(UUID readingId, Integer newCurrentPage) {
+        Reading reading = findReadingByIdOrThrow(readingId);
+        if (newCurrentPage < reading.getCurrentPage()) {
+            throw new ServiceException(ServiceError.READING_INVALID_PAGE_PROGRESS, reading.getCurrentPage());
+        }
+        Integer totalPages = reading.getBook().getNumberOfPages();
+        LocalDateTime now = LocalDateTime.now();
+        if (newCurrentPage >= totalPages) {
+            reading.setCurrentPage(totalPages);
+            reading.setStatus(ReadingStatus.FINISHED);
+            reading.setFinishedAt(now);
+        } else {
+            reading.setCurrentPage(newCurrentPage);
+        }
+        reading.setLastReadedAt(now);
+        readingRepository.save(reading);
     }
 
     public Double calculatePercentRead(Reading reading) {

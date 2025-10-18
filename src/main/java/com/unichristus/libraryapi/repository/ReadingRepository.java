@@ -6,10 +6,11 @@ import com.unichristus.libraryapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ReadingRepository extends JpaRepository<Reading, UUID> {
 
-    List<Reading> findReadingsByUser(User user);
-    boolean existsReadingByUserAndBook(User user, Book book);
+    List<Reading> findReadingsByUserOrderByLastReadedAtDesc(User user);
+    Optional<Reading> findByUserAndBook(User user, Book book);
 }

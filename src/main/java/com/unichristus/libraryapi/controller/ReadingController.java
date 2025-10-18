@@ -7,7 +7,6 @@ import com.unichristus.libraryapi.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,5 +20,10 @@ public class ReadingController {
     public ReadingResponseDTO startReading(@RequestParam UUID bookId, @RequestParam UUID userId) {
         Reading reading = readingService.startReading(bookId, userId);
         return MapperUtil.parse(reading, ReadingResponseDTO.class);
+    }
+
+    @PostMapping("/{id}/update-progress")
+    public void updateReadingProgress(@PathVariable(value = "id") UUID readingId, @RequestParam UUID userId, @RequestParam int currentPage) {
+        readingService.updateReadingProgress(readingId, currentPage);
     }
 }
