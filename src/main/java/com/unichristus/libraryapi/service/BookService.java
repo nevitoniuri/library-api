@@ -6,25 +6,23 @@ import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.repository.BookRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
-    public Book findById(UUID id) {
+    public Book findBookByIdOrThrow(UUID id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ServiceError.BOOK_NOT_FOUND, id));
     }
@@ -45,7 +43,7 @@ public class BookService {
     }
 
     public void updateBook(UUID id, BookUpdateRequestDTO dto) {
-        Book book = findById(id);
+        Book book = findBookByIdOrThrow(id);
         boolean changed = false;
         if (dto.title() != null && !dto.title().equals(book.getTitle())) {
             book.setTitle(dto.title());
@@ -76,6 +74,6 @@ public class BookService {
     }
 
     public void deleteBookById(UUID id) {
-        bookRepository.delete(findById(id));
+        bookRepository.delete(findBookByIdOrThrow(id));
     }
 }

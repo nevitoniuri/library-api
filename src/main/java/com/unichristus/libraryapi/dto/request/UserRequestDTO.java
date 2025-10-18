@@ -1,10 +1,10 @@
-package com.unichristus.libraryapi.model.dto;
+package com.unichristus.libraryapi.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserRequestDTO {
     private Long id;
 
     @NotNull(message = "User name is required")

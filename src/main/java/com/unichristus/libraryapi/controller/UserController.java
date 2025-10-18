@@ -1,7 +1,7 @@
 package com.unichristus.libraryapi.controller;
 
 import com.unichristus.libraryapi.model.User;
-import com.unichristus.libraryapi.model.dto.UserDTO;
+import com.unichristus.libraryapi.dto.request.UserRequestDTO;
 import com.unichristus.libraryapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
         User user = new User();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -42,8 +43,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
-            @PathVariable Long id,
-            @RequestBody @Valid UserDTO userDTO) {
+            @PathVariable UUID id,
+            @RequestBody @Valid UserRequestDTO userDTO) {
 
         User user = new User();
         user.setId(id);
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

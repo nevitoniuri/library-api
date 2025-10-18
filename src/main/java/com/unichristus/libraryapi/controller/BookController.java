@@ -7,6 +7,7 @@ import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.service.BookService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("books")
 public class BookController {
 
     private final BookService bookService;
-
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
 
     @GetMapping
     public List<BookResponseDTO> getAllBooks() {
@@ -30,7 +28,7 @@ public class BookController {
 
     @GetMapping("{id}")
     public Book getBookById(@PathVariable UUID id) {
-        return bookService.findById(id);
+        return bookService.findBookByIdOrThrow(id);
     }
 
     @PostMapping
