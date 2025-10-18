@@ -1,7 +1,6 @@
--- liquibase formatted sql
+--liquibase formatted sql
+--changeset iuri:1760746281910
 
--- Enable the extension to generate UUIDs in PostgreSQL
--- changeset library_team:1
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create users table
