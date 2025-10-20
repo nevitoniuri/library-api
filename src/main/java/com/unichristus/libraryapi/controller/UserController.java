@@ -1,67 +1,52 @@
 package com.unichristus.libraryapi.controller;
 
-import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.dto.request.UserRequestDTO;
+import com.unichristus.libraryapi.dto.response.UserResponseDTO;
+import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.service.UserService;
+import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid UserRequestDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-
-        User savedUser = userService.createUser(user);
-        return ResponseEntity.ok(savedUser);
+    public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO userDTO) {
+        User createdUser = userService.createUser(userDTO);
+        return MapperUtil.parse(createdUser, UserResponseDTO.class);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public UserResponseDTO getUserById(@PathVariable UUID id) {
+        User user = userService.findUserByIdOrThrow(id);
+        return MapperUtil.parse(user, UserResponseDTO.class);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserResponseDTO> getAllUsers() {
+        return userService.findAll().stream()
+                .map(user -> MapperUtil.parse(user, UserResponseDTO.class))
+                .toList();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(
-            @PathVariable UUID id,
-            @RequestBody @Valid UserRequestDTO userDTO) {
-
-        User user = new User();
-        user.setId(id);
-        user.setName(userDTO.getName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
-
-        User updatedUser = userService.updateUser(user);
-        if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
-        }
-        return ResponseEntity.notFound().build();
+    public void updateUser(@PathVariable UUID id, @RequestBody @Valid UserRequestDTO userDTO) {
+        userService.updateUser(id, userDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+    public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -8,5 +8,6 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-
+    // Método para verificar se um email já existe no banco de dados
+    boolean existsByEmail(String email);
 }

@@ -11,7 +11,10 @@ public enum ServiceError {
     READING_NOT_FOUND("READING_NOT_FOUND", HttpStatus.NOT_FOUND, "Leitura não encontrada: {}"),
     ISBN_ALREADY_EXISTS("ISBN_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe um livro cadastrado com o ISBN: {}"),
     READING_ALREADY_EXISTS("READING_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe uma leitura cadastrada para o usuário: {} e o livro: {}"),
-    READING_INVALID_PAGE_PROGRESS("READING_INVALID_PAGE_PROGRESS", HttpStatus.BAD_REQUEST, "O progresso da leitura não pode ser menor que a página atual: {}")
+    READING_INVALID_PAGE_PROGRESS("READING_INVALID_PAGE_PROGRESS", HttpStatus.BAD_REQUEST, "O progresso da leitura não pode ser menor que a página atual: {}"),
+    EMAIL_ALREADY_EXISTS("EMAIL_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe um usuário cadastrado com o email: {}"),
+    FAVORITE_ALREADY_EXISTS("FAVORITE_ALREADY_EXISTS", HttpStatus.BAD_REQUEST, "Já existe um favorito cadastrado para o usuário: {} e o livro: {}"),
+    FAVORITE_NOT_FOUND("FAVORITE_NOT_FOUND", HttpStatus.NOT_FOUND, "Favorito não encontrado: {}"),
     ;
 
     private final String code;
