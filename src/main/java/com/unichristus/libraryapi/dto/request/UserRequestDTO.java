@@ -1,18 +1,19 @@
 package com.unichristus.libraryapi.dto.request;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Data
-public class UserRequestDTO {
-    private Long id;
 
-    @NotNull(message = "User name is required")
-    private String name;
+public record UserRequestDTO(
+        @NotBlank(message = "O nome não pode ser vazio")
+        String name,
 
-    @NotNull(message = "Email is required")
-    private String email;
+        @NotBlank(message = "O email não pode ser vazio")
+        @Email(message = "Formato de email inválido")
+        String email,
 
-    @NotNull(message = "Password is required")
-    private String password;
-}
+        @NotBlank(message = "A senha não pode ser vazia")
+        @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
+        String password
+) {}

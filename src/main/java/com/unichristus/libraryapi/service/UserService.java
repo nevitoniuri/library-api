@@ -1,24 +1,25 @@
 package com.unichristus.libraryapi.service;
 
+import com.unichristus.libraryapi.dto.request.UserRequestDTO;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;;
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     public User findUserByIdOrThrow(UUID id) {
@@ -26,24 +27,57 @@ public class UserService {
                 .orElseThrow(() -> new ServiceException(ServiceError.USER_NOT_FOUND, id));
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    @Transactional
+    public User createUser(UserRequestDTO dto) {
+        validateEmailUnique(dto.email());
+
+        User user = new User();
+        user.setName(dto.name());
+        user.setEmail(dto.email());
+        // IMPORTANTE: Nunca armazene senhas em texto plano.
+        // Use uma biblioteca de criptografia.
+        user.setPassword(dto.password());
+
+        return userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    @Transactional
+    public void updateUser(UUID id, UserRequestDTO dto) {
+        User user = findUserByIdOrThrow(id);
+        boolean changed = false;
 
-    public User updateUser(User user) {
-        // Check if user exists before updating
-        if (userRepository.existsById(user.getId())) {
-            return userRepository.save(user);
+        if (dto.name() != null && !dto.name().equals(user.getName())) {
+            user.setName(dto.name());
+            changed = true;
         }
-        return null; // or throw an exception
+
+        if (dto.email() != null && !dto.email().equals(user.getEmail())) {
+            validateEmailUnique(dto.email());
+            user.setEmail(dto.email());
+            changed = true;
+        }
+
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            user.setPassword(dto.password());
+            changed = true;
+        }
+
+        if (changed) {
+            userRepository.save(user);
+        }
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
+        // Garante que o usuário existe antes de tentar deletar
+        User user = findUserByIdOrThrow(id);
+        userRepository.delete(user);
+    }
+
+    private void validateEmailUnique(String email) {
+        if (userRepository.existsByEmail(email)) {
+            // Assumindo que você tem um erro para isso no meu ServiceError
+            throw new ServiceException(ServiceError.EMAIL_ALREADY_EXISTS, email);
+        }
     }
 }
-

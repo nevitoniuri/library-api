@@ -1,7 +1,5 @@
 --liquibase formatted sql
 --changeset iuri:1760412940331
-CREATE
-    EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE books
 (
@@ -14,3 +12,9 @@ CREATE TABLE books
     updated_at       TIMESTAMPTZ  NOT NULL DEFAULT now(),
     CONSTRAINT uq_books_isbn UNIQUE (isbn)
 );
+
+CREATE OR REPLACE TRIGGER trigger_updated_at
+    BEFORE UPDATE
+    ON books
+    FOR EACH ROW
+EXECUTE FUNCTION trigger_updated_at();
