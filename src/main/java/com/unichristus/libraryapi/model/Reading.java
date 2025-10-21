@@ -3,9 +3,8 @@ package com.unichristus.libraryapi.model;
 import com.unichristus.libraryapi.enums.ReadingStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "readings")
-@EntityListeners(AuditingEntityListener.class)
 public class Reading {
 
     @Id
@@ -49,11 +47,11 @@ public class Reading {
     @Column(name = "finished_at")
     private LocalDateTime finishedAt;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
