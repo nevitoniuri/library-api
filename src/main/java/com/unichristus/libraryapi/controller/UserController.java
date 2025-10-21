@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.controller;
 
-import com.unichristus.libraryapi.dto.request.UserRequestDTO;
+import com.unichristus.libraryapi.dto.request.UserCreateRequestDTO;
+import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
 import com.unichristus.libraryapi.dto.response.UserResponseDTO;
 import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.service.UserService;
@@ -15,37 +16,38 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("users")
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
-    public UserResponseDTO createUser(@RequestBody @Valid UserRequestDTO userDTO) {
-        User createdUser = userService.createUser(userDTO);
-        return MapperUtil.parse(createdUser, UserResponseDTO.class);
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponseDTO createUser(@RequestBody @Valid UserCreateRequestDTO dto) {
+        return MapperUtil.parse(userService.createUser(dto), UserResponseDTO.class);
     }
 
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable UUID id) {
-        User user = userService.findUserByIdOrThrow(id);
-        return MapperUtil.parse(user, UserResponseDTO.class);
+        return MapperUtil.parse(userService.findUserByIdOrThrow(id), UserResponseDTO.class);
     }
 
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
         return userService.findAll().stream()
                 .map(user -> MapperUtil.parse(user, UserResponseDTO.class))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @PutMapping("/{id}")
-    public void updateUser(@PathVariable UUID id, @RequestBody @Valid UserRequestDTO userDTO) {
-        userService.updateUser(id, userDTO);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUser(@PathVariable UUID id, @RequestBody @Valid UserUpdateRequestDTO dto) {
+        userService.updateUser(id, dto);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
     }
