@@ -7,9 +7,10 @@ import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,8 +19,8 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public Page<Book> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 
     public Book findBookByIdOrThrow(UUID id) {

@@ -8,10 +8,11 @@ import com.unichristus.libraryapi.service.BookService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,8 +23,9 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<BookResponseDTO> getAllBooks() {
-        return bookService.findAll().stream().map((book) -> MapperUtil.parse(book, BookResponseDTO.class)).toList();
+    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+        return bookService.findAll(pageable)
+                .map((book) -> MapperUtil.parse(book, BookResponseDTO.class));
     }
 
     @GetMapping("{id}")
@@ -39,7 +41,7 @@ public class BookController {
         return MapperUtil.parse(createdBook, BookResponseDTO.class);
     }
 
-    @PutMapping("{id}") //TODO: Put ou Patch?
+    @PatchMapping("{id}")
     public void updateBook(@PathVariable UUID id, @RequestBody BookUpdateRequestDTO bookUpdateRequestDTO) {
         bookService.updateBook(id, bookUpdateRequestDTO);
     }
