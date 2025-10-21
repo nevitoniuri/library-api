@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.dto.response;
 
 import com.unichristus.libraryapi.enums.ReadingStatus;
-import com.unichristus.libraryapi.model.Reading;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,7 @@ public class ReadingResponseDTO {
     private BookLowResponseDTO book;
     private ReadingStatus status;
     private Integer currentPage;
-    private Double percentRead;
+    private Integer progress;
     private LocalDateTime startedAt;
     private LocalDateTime lastReadedAt;
     private LocalDateTime finishedAt;

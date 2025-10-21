@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,22 +27,21 @@ public class ReadingService {
                 .orElseThrow(() -> new ServiceException(ServiceError.READING_NOT_FOUND, readingId));
     }
 
-    public List<Reading> getReadingsByUserOrderedByLastReadedAtDesc(UUID userId) {
-        User user = userService.findUserByIdOrThrow(userId);
-        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user);
+    public List<Reading> getRecentReadingsByUser(User user, int limit) {
+        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user, limit);
     }
 
-    private Optional<Reading> findByUserAndBook(User user, Book book) {
-        return readingRepository.findByUserAndBook(user, book);
+    public boolean hasInProgressReading(User user, Book book) {
+        return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
     public Reading startReading(UUID bookId, UUID userId) {
         User user = userService.findUserByIdOrThrow(userId);
         Book book = bookService.findBookByIdOrThrow(bookId);
         LocalDateTime now = LocalDateTime.now();
-        findByUserAndBook(user, book).ifPresent(reading -> {
-            throw new ServiceException(ServiceError.READING_ALREADY_EXISTS, userId, bookId);
-        });
+        if (hasInProgressReading(user, book)) {
+            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY_EXISTS, userId, bookId);
+        }
         Reading reading = Reading.builder()
                 .book(book)
                 .user(user)
@@ -55,8 +53,14 @@ public class ReadingService {
         return readingRepository.save(reading);
     }
 
-    public void updateReadingProgress(UUID readingId, Integer newCurrentPage) {
+    public void updateReadingProgress(UUID readingId, UUID userId, Integer newCurrentPage) {
         Reading reading = findReadingByIdOrThrow(readingId);
+        if (!userId.equals(reading.getUser().getId())) {
+            throw new ServiceException(ServiceError.READING_USER_MISMATCH, userId, readingId);
+        }
+        if (reading.getStatus() == ReadingStatus.FINISHED) {
+            throw new ServiceException(ServiceError.READING_ALREADY_FINISHED, reading.getId());
+        }
         if (newCurrentPage < reading.getCurrentPage()) {
             throw new ServiceException(ServiceError.READING_INVALID_PAGE_PROGRESS, reading.getCurrentPage());
         }
@@ -73,13 +77,25 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
-    public Double calculatePercentRead(Reading reading) {
+    public void finishReading(UUID readingId) {
+        Reading reading = findReadingByIdOrThrow(readingId);
+        if (reading.getStatus() == ReadingStatus.FINISHED) {
+            throw new ServiceException(ServiceError.READING_ALREADY_FINISHED, reading.getId());
+        }
+        reading.setStatus(ReadingStatus.FINISHED);
+        reading.setFinishedAt(LocalDateTime.now());
+        reading.setCurrentPage(reading.getBook().getNumberOfPages());
+        readingRepository.save(reading);
+    }
+
+    public int calculateProgressPercentage(Reading reading) {
         Integer totalPages = reading.getBook().getNumberOfPages();
         Integer currentPage = reading.getCurrentPage();
-        if (totalPages == null || totalPages == 0) {
-            return 0.0;
+        if (totalPages == null || totalPages == 0 || currentPage == null) {
+            return 0;
         }
-        return (currentPage.doubleValue() / totalPages.doubleValue()) * 100;
+        double percentage = (currentPage.doubleValue() / totalPages.doubleValue()) * 100;
+        return (int) Math.round(percentage);
     }
 
 }

@@ -2,7 +2,6 @@ package com.unichristus.libraryapi.service;
 
 import com.unichristus.libraryapi.dto.request.FavoriteCreateRequestDTO;
 import com.unichristus.libraryapi.dto.request.FavoriteUpdateRequestDTO;
-import com.unichristus.libraryapi.dto.response.FavoriteResponseDTO;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.Book;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional

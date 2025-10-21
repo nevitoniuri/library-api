@@ -5,7 +5,9 @@ import com.unichristus.libraryapi.dto.response.HomeResponseDTO;
 import com.unichristus.libraryapi.dto.response.ReadingResponseDTO;
 import com.unichristus.libraryapi.enums.ReadingStatus;
 import com.unichristus.libraryapi.model.Reading;
+import com.unichristus.libraryapi.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +17,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HomeService {
 
+    @Value("${app.recent-readings-limit}")
+    private int recentReadingsLimit;
+
     private final ReadingService readingService;
+    private final UserService userService;
 
     public HomeResponseDTO resume(UUID userId) {
-        List<Reading> readings = readingService.getReadingsByUserOrderedByLastReadedAtDesc(userId);
+        User user = userService.findUserByIdOrThrow(userId);
+        List<Reading> readings = readingService.getRecentReadingsByUser(user, recentReadingsLimit);
         int totalBooksReading = readings.stream()
                 .filter((reading) -> reading.getStatus().equals(ReadingStatus.IN_PROGRESS))
                 .toList().size();
@@ -39,7 +46,7 @@ public class HomeService {
                 .book(new BookLowResponseDTO(reading.getBook().getId(), reading.getBook().getTitle()))
                 .status(reading.getStatus())
                 .currentPage(reading.getCurrentPage())
-                .percentRead(readingService.calculatePercentRead(reading))
+                .progress(readingService.calculateProgressPercentage(reading))
                 .startedAt(reading.getStartedAt())
                 .lastReadedAt(reading.getLastReadedAt())
                 .finishedAt(reading.getFinishedAt())

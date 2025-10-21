@@ -3,7 +3,6 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.dto.request.FavoriteCreateRequestDTO;
 import com.unichristus.libraryapi.dto.request.FavoriteUpdateRequestDTO;
 import com.unichristus.libraryapi.dto.response.FavoriteResponseDTO;
-import com.unichristus.libraryapi.model.Favorite;
 import com.unichristus.libraryapi.service.FavoriteService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;

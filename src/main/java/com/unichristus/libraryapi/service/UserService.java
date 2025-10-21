@@ -8,7 +8,6 @@ import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

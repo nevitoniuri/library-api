@@ -1,0 +1,13 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/library_api}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:858733}
+    driver-class-name: org.postgresql.Driver
+
+#Variáveis de ambiente
+app:
+  recent-readings-limit: ${RECENT_READINGS_LIMIT:10}

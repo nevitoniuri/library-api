@@ -3,7 +3,6 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.dto.request.UserCreateRequestDTO;
 import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
 import com.unichristus.libraryapi.dto.response.UserResponseDTO;
-import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.service.UserService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import jakarta.validation.Valid;
