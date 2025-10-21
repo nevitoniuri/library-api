@@ -1,9 +1,12 @@
 package com.unichristus.libraryapi.dto.response;
 
+import lombok.Data;
+
 import java.util.UUID;
-public record UserResponseDTO(
-        UUID id,
-        String name,
-        String email
-) {
+
+@Data
+public class UserResponseDTO {
+    private UUID id;
+    private String name;
+    private String email;
 }
