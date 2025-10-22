@@ -23,35 +23,27 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(UserRegisterRequest request) {
-        // Verifica se email já existe
-        if (userService.existsByEmail(request.email())) {
-            throw new RuntimeException("Email já cadastrado");
-        }
-
-        // Cria novo usuário
-        User user = new User();
-        user.setName(request.name());
-        user.setEmail(request.email());
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setActive(true);
-
-        User savedUser = userService.save(user);
-
-        // Gera token
-        CustomUserDetails userDetails = CustomUserDetails.from(savedUser);
+    private AuthResponse generateToken(User user) {
+        CustomUserDetails userDetails = CustomUserDetails.from(user);
         String token = jwtService.generateToken(userDetails);
+        return new AuthResponse(token, "Bearer", user.getId(), user.getName(), user.getEmail());
+    }
 
-        return AuthResponse.builder()
-                .token(token)
-                .userId(savedUser.getId())
-                .name(savedUser.getName())
-                .email(savedUser.getEmail())
-                .build();
+    public AuthResponse register(UserRegisterRequest request) {
+        if (userService.existsByEmail(request.email())) {
+            throw new ServiceException(ServiceError.EMAIL_ALREADY_EXISTS, request.email());
+        }
+        User savedUser = userService.save(
+                User.builder()
+                        .name(request.name())
+                        .email(request.email())
+                        .password(passwordEncoder.encode(request.password()))
+                        .active(Boolean.TRUE).build()
+        );
+        return generateToken(savedUser);
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Autentica
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -62,17 +54,6 @@ public class AuthService {
         // Busca usuário
         User user = userService.findUserByEmail(request.getEmail())
                 .orElseThrow(() -> new ServiceException(ServiceError.USER_NOT_FOUND));
-
-        // Gera token
-        CustomUserDetails userDetails = CustomUserDetails.from(user);
-        String token = jwtService.generateToken(userDetails);
-
-        return AuthResponse.builder()
-                .token(token)
-                .type("Bearer")
-                .userId(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
+        return generateToken(user);
     }
 }

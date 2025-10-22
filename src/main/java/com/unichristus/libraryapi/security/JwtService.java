@@ -26,10 +26,8 @@ public class JwtService {
     // Gera token com userId como subject
     public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", userDetails.getEmail()); // Email como claim adicional
-        claims.put("name", userDetails.getName());
-
-        // ✅ userId como SUBJECT (identificador principal)
+        claims.put("email", userDetails.getEmail());
+        // userId como SUBJECT (identificador principal)
         return createToken(claims, userDetails.getId().toString());
     }
 
@@ -48,17 +46,6 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    // Mantém por compatibilidade (pega do claim)
-    public String extractEmail(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("email", String.class);
-    }
-
-    // ✅ Agora extrai userId do subject
     public UUID extractUserId(String token) {
         String userId = extractClaim(token, Claims::getSubject);
         return UUID.fromString(userId);
@@ -77,13 +64,7 @@ public class JwtService {
                 .getPayload();
     }
 
-    // ✅ Valida usando userId
-    public Boolean validateToken(String token, CustomUserDetails userDetails) {
-        final UUID userId = extractUserId(token);
-        return (userId.equals(userDetails.getId()) && !isTokenExpired(token));
-    }
-
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

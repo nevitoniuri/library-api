@@ -38,7 +38,7 @@ public class ReadingService {
         Book book = bookService.findBookByIdOrThrow(bookId);
         LocalDateTime now = LocalDateTime.now();
         if (hasInProgressReading(user, book)) {
-            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY_EXISTS, user.getId(), bookId);
+            throw new ServiceException(ServiceError.READING_IN_PROGRESS, user.getEmail(), book.getTitle());
         }
         Reading reading = Reading.builder()
                 .book(book)
@@ -57,7 +57,7 @@ public class ReadingService {
             throw new ServiceException(ServiceError.READING_USER_MISMATCH, userId, readingId);
         }
         if (reading.getStatus() == ReadingStatus.FINISHED) {
-            throw new ServiceException(ServiceError.READING_ALREADY_FINISHED, reading.getId());
+            throw new ServiceException(ServiceError.READING_FINISHED, reading.getId());
         }
         if (newCurrentPage < reading.getCurrentPage()) {
             throw new ServiceException(ServiceError.READING_INVALID_PAGE_PROGRESS, reading.getCurrentPage());
@@ -78,7 +78,7 @@ public class ReadingService {
     public void finishReading(UUID readingId) {
         Reading reading = findReadingByIdOrThrow(readingId);
         if (reading.getStatus() == ReadingStatus.FINISHED) {
-            throw new ServiceException(ServiceError.READING_ALREADY_FINISHED, reading.getId());
+            throw new ServiceException(ServiceError.READING_FINISHED, reading.getId());
         }
         reading.setStatus(ReadingStatus.FINISHED);
         reading.setFinishedAt(LocalDateTime.now());
