@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-@AuthenticationPrincipal
 @Parameter(hidden = true)
+@AuthenticationPrincipal
 public @interface LoggedUser {
 }
