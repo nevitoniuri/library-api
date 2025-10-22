@@ -41,6 +41,7 @@ public class BookController {
         return MapperUtil.parse(createdBook, BookResponseDTO.class);
     }
 
+    //TODO: receber entidade completa e atualizar todos os campos?
     @PatchMapping("{id}")
     public void updateBook(@PathVariable UUID id, @RequestBody BookUpdateRequestDTO bookUpdateRequestDTO) {
         bookService.updateBook(id, bookUpdateRequestDTO);

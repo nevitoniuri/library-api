@@ -1,15 +1,16 @@
 package com.unichristus.libraryapi.service;
 
-import com.unichristus.libraryapi.dto.request.UserCreateRequestDTO;
 import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -27,21 +29,16 @@ public class UserService {
                 .orElseThrow(() -> new ServiceException(ServiceError.USER_NOT_FOUND, id));
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
-    public User createUser(UserCreateRequestDTO dto) {
-        validateEmailUnique(dto.email());
-
-        User user = User.builder()
-                .name(dto.name())
-                .email(dto.email())
-                .password(dto.password()) // Na prática, a senha deve ser criptografada
-                .build();
-
-        return save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public void updateUser(UUID id, UserUpdateRequestDTO dto) {
@@ -60,7 +57,7 @@ public class UserService {
         }
 
         if (dto.password() != null && !dto.password().isEmpty()) {
-            user.setPassword(dto.password()); // Na prática, a senha deve ser criptografada
+            user.setPassword(passwordEncoder.encode(dto.password()));
             changed = true;
         }
 
