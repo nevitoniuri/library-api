@@ -20,7 +20,6 @@ public class ReadingService {
 
     private final ReadingRepository readingRepository;
     private final BookService bookService;
-    private final UserService userService;
 
     public Reading findReadingByIdOrThrow(UUID readingId) {
         return readingRepository.findById(readingId)
@@ -35,12 +34,11 @@ public class ReadingService {
         return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public Reading startReading(UUID bookId, UUID userId) {
-        User user = userService.findUserByIdOrThrow(userId);
+    public Reading startReading(UUID bookId, User user) {
         Book book = bookService.findBookByIdOrThrow(bookId);
         LocalDateTime now = LocalDateTime.now();
         if (hasInProgressReading(user, book)) {
-            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY_EXISTS, userId, bookId);
+            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY_EXISTS, user.getId(), bookId);
         }
         Reading reading = Reading.builder()
                 .book(book)

@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.config;
 
-import com.unichristus.libraryapi.annotation.CurrentUserId;
+import com.unichristus.libraryapi.annotation.LoggedUser;
+import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.security.CustomUserDetails;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -11,15 +12,13 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import java.util.UUID;
-
 @Component
-public class CurrentUserIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoggerUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(CurrentUserId.class)
-                && parameter.getParameterType().equals(UUID.class);
+        return parameter.hasParameterAnnotation(LoggedUser.class)
+                && parameter.getParameterType().equals(User.class);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class CurrentUserIdArgumentResolver implements HandlerMethodArgumentResol
         Object principal = authentication.getPrincipal();
 
         if (principal instanceof CustomUserDetails customUser) {
-            return customUser.getId();
+            return CustomUserDetails.toEntity(customUser);
         }
 
         throw new IllegalStateException("Principal inválido");

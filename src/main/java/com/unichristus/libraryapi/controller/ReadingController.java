@@ -1,9 +1,10 @@
 package com.unichristus.libraryapi.controller;
 
-import com.unichristus.libraryapi.annotation.CurrentUserId;
+import com.unichristus.libraryapi.annotation.LoggedUser;
 import com.unichristus.libraryapi.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.dto.response.ReadingResponseDTO;
 import com.unichristus.libraryapi.model.Reading;
+import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.service.ReadingService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import com.unichristus.libraryapi.util.ServiceURIs;
@@ -38,9 +39,9 @@ public class ReadingController {
     })
     public ResponseEntity<ReadingResponseDTO> startReading(
             @RequestBody @Valid StartReadingRequest request,
-            @CurrentUserId UUID userId
-    ) {
-        Reading reading = readingService.startReading(request.getBookId(), userId);
+            @LoggedUser User user
+            ) {
+        Reading reading = readingService.startReading(request.getBookId(), user);
         ReadingResponseDTO response = MapperUtil.parse(reading, ReadingResponseDTO.class);
         return ResponseEntity.created(URI.create(ServiceURIs.READINGS + "/" + reading.getId())).body(response);
     }
