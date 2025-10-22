@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.controller;
 
-import com.unichristus.libraryapi.dto.request.UserCreateRequestDTO;
+import com.unichristus.libraryapi.dto.request.UserRegisterRequest;
 import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
 import com.unichristus.libraryapi.dto.response.UserResponseDTO;
 import com.unichristus.libraryapi.service.UserService;
@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO createUser(@RequestBody @Valid UserCreateRequestDTO dto) {
+    public UserResponseDTO createUser(@RequestBody @Valid UserRegisterRequest dto) {
         return MapperUtil.parse(userService.createUser(dto), UserResponseDTO.class);
     }
 

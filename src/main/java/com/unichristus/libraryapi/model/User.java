@@ -33,6 +33,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;

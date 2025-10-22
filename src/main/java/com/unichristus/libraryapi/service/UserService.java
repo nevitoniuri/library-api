@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.service;
 
-import com.unichristus.libraryapi.dto.request.UserCreateRequestDTO;
+import com.unichristus.libraryapi.dto.request.UserRegisterRequest;
 import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,12 +28,19 @@ public class UserService {
                 .orElseThrow(() -> new ServiceException(ServiceError.USER_NOT_FOUND, id));
     }
 
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public User save(User user) {
         return userRepository.save(user);
     }
 
-
-    public User createUser(UserCreateRequestDTO dto) {
+    public User createUser(UserRegisterRequest dto) {
         validateEmailUnique(dto.email());
 
         User user = User.builder()

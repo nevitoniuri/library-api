@@ -50,6 +50,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
         log.error("Generic Exception: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponseDTO(ex.getCause().getMessage(), ex.getMessage()));
+                .body(new ErrorResponseDTO(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()));
     }
 }

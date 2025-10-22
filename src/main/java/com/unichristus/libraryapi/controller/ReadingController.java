@@ -1,11 +1,12 @@
 package com.unichristus.libraryapi.controller;
 
+import com.unichristus.libraryapi.annotation.CurrentUserId;
 import com.unichristus.libraryapi.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.dto.response.ReadingResponseDTO;
 import com.unichristus.libraryapi.model.Reading;
 import com.unichristus.libraryapi.service.ReadingService;
 import com.unichristus.libraryapi.util.MapperUtil;
-import com.unichristus.libraryapi.util.Commons;
+import com.unichristus.libraryapi.util.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(Commons.READINGS)
+@RequestMapping(ServiceURIs.READINGS)
 @Tag(name = "Readings", description = "Endpoints para gerenciamento de leituras")
 public class ReadingController {
 
@@ -37,11 +38,11 @@ public class ReadingController {
     })
     public ResponseEntity<ReadingResponseDTO> startReading(
             @RequestBody @Valid StartReadingRequest request,
-            @RequestHeader(Commons.X_USER_ID) UUID userId
+            @CurrentUserId UUID userId
     ) {
         Reading reading = readingService.startReading(request.getBookId(), userId);
         ReadingResponseDTO response = MapperUtil.parse(reading, ReadingResponseDTO.class);
-        return ResponseEntity.created(URI.create(Commons.READINGS + "/" + reading.getId())).body(response);
+        return ResponseEntity.created(URI.create(ServiceURIs.READINGS + "/" + reading.getId())).body(response);
     }
 
     @PatchMapping("/{id}/update-progress")
