@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.service;
 
-import com.unichristus.libraryapi.dto.mapper.ReadingResponseMapper;
+import com.unichristus.libraryapi.mapper.ReadingResponseMapper;
 import com.unichristus.libraryapi.dto.response.ReadingResponse;
 import com.unichristus.libraryapi.enums.ReadingStatus;
 import com.unichristus.libraryapi.exception.ServiceError;

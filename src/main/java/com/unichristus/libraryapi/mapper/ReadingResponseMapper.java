@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.dto.mapper;
+package com.unichristus.libraryapi.mapper;
 
 import com.unichristus.libraryapi.dto.response.BookLowResponse;
 import com.unichristus.libraryapi.dto.response.ReadingResponse;
