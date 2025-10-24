@@ -1,5 +1,7 @@
 package com.unichristus.libraryapi.service;
 
+import com.unichristus.libraryapi.dto.mapper.ReadingResponseMapper;
+import com.unichristus.libraryapi.dto.response.ReadingResponse;
 import com.unichristus.libraryapi.enums.ReadingStatus;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
@@ -20,25 +22,26 @@ public class ReadingService {
 
     private final ReadingRepository readingRepository;
     private final BookService bookService;
+    private final FavoriteService favoriteService;
 
-    public Reading findReadingByIdOrThrow(UUID readingId) {
+    public Reading findByIdOrThrow(UUID readingId) throws ServiceException {
         return readingRepository.findById(readingId)
                 .orElseThrow(() -> new ServiceException(ServiceError.READING_NOT_FOUND, readingId));
     }
 
-    public List<Reading> getRecentReadingsByUser(User user, int limit) {
-        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user, limit);
+    public List<Reading> findReadingsByUser(User user) {
+        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user);
     }
 
     public boolean hasInProgressReading(User user, Book book) {
         return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public Reading startReading(UUID bookId, User user) {
+    public ReadingResponse startReading(UUID bookId, User user) {
         Book book = bookService.findBookByIdOrThrow(bookId);
         LocalDateTime now = LocalDateTime.now();
         if (hasInProgressReading(user, book)) {
-            throw new ServiceException(ServiceError.READING_IN_PROGRESS, user.getEmail(), book.getTitle());
+            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY, user.getEmail(), book.getTitle());
         }
         Reading reading = Reading.builder()
                 .book(book)
@@ -48,25 +51,26 @@ public class ReadingService {
                 .startedAt(now)
                 .lastReadedAt(now)
                 .build();
-        return readingRepository.save(reading);
+        Reading saved = readingRepository.save(reading);
+        return ReadingResponseMapper.toReadingResponse(saved, favoriteService.isFavorite(book, user));
     }
 
-    public void updateReadingProgress(UUID readingId, UUID userId, Integer newCurrentPage) {
-        Reading reading = findReadingByIdOrThrow(readingId);
-        if (!userId.equals(reading.getUser().getId())) {
-            throw new ServiceException(ServiceError.READING_USER_MISMATCH, userId, readingId);
+    public void updateReadingProgress(UUID readingId, User user, Integer newCurrentPage) {
+        Reading reading = findByIdOrThrow(readingId);
+        if (!user.getId().equals(reading.getUser().getId())) {
+            throw new ServiceException(ServiceError.READING_BELONGS_TO_ANOTHER_USER, readingId);
         }
         if (reading.getStatus() == ReadingStatus.FINISHED) {
-            throw new ServiceException(ServiceError.READING_FINISHED, reading.getId());
+            throw new ServiceException(ServiceError.READING_FINISHED_ALREADY, readingId);
         }
-        if (newCurrentPage < reading.getCurrentPage()) {
-            throw new ServiceException(ServiceError.READING_INVALID_PAGE_PROGRESS, reading.getCurrentPage());
+        if (newCurrentPage < reading.getCurrentPage() || newCurrentPage > reading.getBook().getNumberOfPages()) {
+            throw new ServiceException(ServiceError.READING_INVALID_PAGE_PROGRESS);
         }
         Integer totalPages = reading.getBook().getNumberOfPages();
         LocalDateTime now = LocalDateTime.now();
         if (newCurrentPage >= totalPages) {
-            reading.setCurrentPage(totalPages);
             reading.setStatus(ReadingStatus.FINISHED);
+            reading.setCurrentPage(totalPages);
             reading.setFinishedAt(now);
         } else {
             reading.setCurrentPage(newCurrentPage);
@@ -75,18 +79,7 @@ public class ReadingService {
         readingRepository.save(reading);
     }
 
-    public void finishReading(UUID readingId) {
-        Reading reading = findReadingByIdOrThrow(readingId);
-        if (reading.getStatus() == ReadingStatus.FINISHED) {
-            throw new ServiceException(ServiceError.READING_FINISHED, reading.getId());
-        }
-        reading.setStatus(ReadingStatus.FINISHED);
-        reading.setFinishedAt(LocalDateTime.now());
-        reading.setCurrentPage(reading.getBook().getNumberOfPages());
-        readingRepository.save(reading);
-    }
-
-    public int calculateProgressPercentage(Reading reading) {
+    public static int calculateProgressPercentage(Reading reading) {
         Integer totalPages = reading.getBook().getNumberOfPages();
         Integer currentPage = reading.getCurrentPage();
         if (totalPages == null || totalPages == 0 || currentPage == null) {

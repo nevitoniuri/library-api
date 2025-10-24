@@ -13,9 +13,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadingResponseDTO {
+public class ReadingResponse {
     private UUID id;
-    private BookLowResponseDTO book;
+    private BookLowResponse book;
     private ReadingStatus status;
     private Integer currentPage;
     private Integer progress;

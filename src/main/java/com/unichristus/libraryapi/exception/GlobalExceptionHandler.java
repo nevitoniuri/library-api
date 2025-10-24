@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,7 +16,7 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<ErrorResponseDTO> handleServiceException(ServiceException ex) {
+    public ResponseEntity<ErrorResponse> handleServiceException(ServiceException ex) {
         log.error("ServiceException: {}", ex.getMessage(), ex);
         String description = ex.getError().getDescription();
         if (ex.getParameters() != null) {
@@ -26,30 +25,30 @@ public class GlobalExceptionHandler {
             }
         }
         return ResponseEntity.status(ex.getError().getHttpStatus())
-                .body(new ErrorResponseDTO(ex.getError().getCode(), description));
+                .body(new ErrorResponse(ex.getError().getCode(), description));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         log.error("Validation Exception: {}", ex.getMessage());
-        List<FieldErrorDTO> fieldErrors = ex.getBindingResult().getAllErrors().stream()
+        List<FieldError> fieldErrors = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> {
-                    String fieldName = ((FieldError) error).getField();
+                    String fieldName = ((org.springframework.validation.FieldError) error).getField();
                     String errorMessage = error.getDefaultMessage();
-                    return new FieldErrorDTO(fieldName, errorMessage);
+                    return new FieldError(fieldName, errorMessage);
                 })
                 .toList();
-        var validationErrorResponseDTO = new ValidationErrorResponseDTO();
-        validationErrorResponseDTO.setCode("VALIDATION_ERROR");
-        validationErrorResponseDTO.setMessage("Validation failed");
-        validationErrorResponseDTO.setFieldErrors(fieldErrors);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationErrorResponseDTO);
+        var validationErrorResponse = new ValidationErrorResponse();
+        validationErrorResponse.setCode("VALIDATION_ERROR");
+        validationErrorResponse.setMessage("Validation failed");
+        validationErrorResponse.setFieldErrors(fieldErrors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationErrorResponse);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         log.error("Generic Exception: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorResponseDTO(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()));
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage()));
     }
 }

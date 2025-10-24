@@ -18,7 +18,7 @@ CREATE TABLE readings
 -- Não permitir que um usuário tenha mais de uma leitura ativa por livro
 CREATE UNIQUE INDEX uk_readings_user_book_active
     ON readings (user_id, book_id)
-    WHERE status = 'FINISHED';
+    WHERE status = 'IN_PROGRESS';
 
 --Performance indexes
 CREATE INDEX idx_readings_user_id

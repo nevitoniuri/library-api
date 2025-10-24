@@ -35,7 +35,7 @@ public class AuthService {
         }
         User savedUser = userService.save(
                 User.builder()
-                        .name(request.name())
+                        .name(request.name().trim())
                         .email(request.email())
                         .password(passwordEncoder.encode(request.password()))
                         .active(Boolean.TRUE).build()
@@ -46,13 +46,11 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        request.email(),
+                        request.password().trim()
                 )
         );
-
-        // Busca usuário
-        User user = userService.findUserByEmail(request.getEmail())
+        User user = userService.findUserByEmail(request.email())
                 .orElseThrow(() -> new ServiceException(ServiceError.USER_NOT_FOUND));
         return generateToken(user);
     }

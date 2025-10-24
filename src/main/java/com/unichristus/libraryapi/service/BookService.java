@@ -1,7 +1,7 @@
 package com.unichristus.libraryapi.service;
 
-import com.unichristus.libraryapi.dto.request.BookCreateRequestDTO;
-import com.unichristus.libraryapi.dto.request.BookUpdateRequestDTO;
+import com.unichristus.libraryapi.dto.request.BookCreateRequest;
+import com.unichristus.libraryapi.dto.request.BookUpdateRequest;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.Book;
@@ -32,7 +32,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book createBook(BookCreateRequestDTO dto) {
+    public Book createBook(BookCreateRequest dto) {
         validateISBNUnique(dto.isbn());
         Book book = Book.builder()
                 .title(dto.title())
@@ -43,7 +43,7 @@ public class BookService {
         return save(book);
     }
 
-    public void updateBook(UUID id, BookUpdateRequestDTO dto) {
+    public void updateBook(UUID id, BookUpdateRequest dto) {
         Book book = findBookByIdOrThrow(id);
         boolean changed = false;
         if (dto.title() != null && !dto.title().equals(book.getTitle())) {

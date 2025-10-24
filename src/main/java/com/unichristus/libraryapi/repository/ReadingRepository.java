@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ReadingRepository extends JpaRepository<Reading, UUID> {
@@ -17,9 +18,8 @@ public interface ReadingRepository extends JpaRepository<Reading, UUID> {
             SELECT r FROM Reading r
             WHERE r.user = :user
             ORDER BY r.lastReadedAt DESC
-            LIMIT :limit
             """)
-    List<Reading> findReadingsByUserOrderByLastReadedAtDesc(User user, int limit);
+    List<Reading> findReadingsByUserOrderByLastReadedAtDesc(User user);
 
     @Query("""
             SELECT COUNT(r) > 0
@@ -39,6 +39,12 @@ public interface ReadingRepository extends JpaRepository<Reading, UUID> {
     List<Reading> findReadingHistory(
             @Param("userId") UUID userId,
             @Param("bookId") UUID bookId
+    );
+
+    Optional<Reading> findReadingByBookAndUserAndStatus(
+            Book book,
+            User user,
+            ReadingStatus status
     );
 
     @Query("SELECT r FROM Reading r WHERE r.user.id = :userId " +
