@@ -5,7 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,16 +12,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
+@IdClass(FavoriteId.class)
 @Table(name = "favorites")
 public class Favorite {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
