@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.service;
 
-import com.unichristus.libraryapi.dto.request.UserUpdateRequestDTO;
+import com.unichristus.libraryapi.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.User;
@@ -41,7 +41,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateUser(UUID id, UserUpdateRequestDTO dto) {
+    public void updateUser(UUID id, UserUpdateRequest dto) {
         User user = findUserByIdOrThrow(id);
         boolean changed = false;
 

@@ -1,18 +1,29 @@
 package com.unichristus.libraryapi.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserRegisterRequest(
-        @NotBlank(message = "O nome não pode ser vazio")
+        @NotBlank
+        @Size(min = 3, max = 100)
+        @Schema(description = "Nome do usuário", example = "User")
         String name,
 
-        @NotBlank(message = "O email não pode ser vazio")
-        @Email(message = "Formato de email inválido")
+        @NotBlank
+        @Email
+        @Size(min = 5, max = 255)
+        @Schema(description = "Email do usuário", example = "user@email.com")
         String email,
 
-        @NotBlank(message = "A senha não pode ser vazia")
-        @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
+        @NotBlank
+        @Size(min = 8, max = 64)
+        @Pattern(
+                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,64}$",
+                message = "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial (@$!%*?&), e não pode ter espaços em branco"
+        )
+        @Schema(description = "Senha do usuário", example = "strongPassword123")
         String password
 ) {}

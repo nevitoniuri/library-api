@@ -18,10 +18,11 @@ public enum ServiceError {
 
     //READING ERRORS
     READING_NOT_FOUND("READING_NOT_FOUND", HttpStatus.NOT_FOUND, "Leitura não encontrada: {}"),
-    READING_IN_PROGRESS("READING_IN_PROGRESS", HttpStatus.CONFLICT, "Já existe uma leitura em progresso para o usuário: {} e o livro: {}"),
-    READING_INVALID_PAGE_PROGRESS("READING_INVALID_PAGE_PROGRESS", HttpStatus.BAD_REQUEST, "O progresso da leitura não pode ser menor que a página atual: {}"),
-    READING_FINISHED("READING_FINISHED", HttpStatus.BAD_REQUEST, "A leitura já foi finalizada: {}"),
-    READING_USER_MISMATCH("READING_USER_MISMATCH", HttpStatus.BAD_REQUEST, "O usuário {} não corresponde ao usuário da leitura: {}"),
+    READING_IN_PROGRESS_ALREADY("READING_IN_PROGRESS_ALREADY", HttpStatus.CONFLICT, "Já existe uma leitura em progresso para o usuário: {} e o livro: {}"),
+    READING_IN_PROGRESS_NOT_FOUND("READING_IN_PROGRESS_NOT_FOUND", HttpStatus.NOT_FOUND, "Nenhuma leitura em progresso encontrada para o usuário: {} e o livro: {}"),
+    READING_FINISHED_ALREADY("READING_FINISHED_ALREADY", HttpStatus.BAD_REQUEST, "A Leitura já está finalizada e não pode ser atualizada: {}"),
+    READING_INVALID_PAGE_PROGRESS("READING_INVALID_PAGE_PROGRESS", HttpStatus.BAD_REQUEST, "O progresso da leitura é inválido"),
+    READING_BELONGS_TO_ANOTHER_USER("READING_BELONGS_TO_ANOTHER_USER", HttpStatus.BAD_REQUEST, "A leitura {} está associada a outro usuário."),
 
     //FAVORITE ERRORS
     FAVORITE_ALREADY_EXISTS("FAVORITE_ALREADY_EXISTS", HttpStatus.CONFLICT, "Já existe um favorito cadastrado para o usuário: {} e o livro: {}"),

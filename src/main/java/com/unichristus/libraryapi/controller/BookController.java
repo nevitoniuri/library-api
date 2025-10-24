@@ -1,55 +1,35 @@
 package com.unichristus.libraryapi.controller;
 
-import com.unichristus.libraryapi.dto.request.BookCreateRequestDTO;
-import com.unichristus.libraryapi.dto.request.BookUpdateRequestDTO;
-import com.unichristus.libraryapi.dto.response.BookResponseDTO;
+import com.unichristus.libraryapi.dto.response.BookResponse;
 import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.service.BookService;
 import com.unichristus.libraryapi.util.MapperUtil;
-import jakarta.validation.Valid;
+import com.unichristus.libraryapi.util.ServiceURIs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("books")
+@RequestMapping(ServiceURIs.BOOKS_RESOURCE)
 public class BookController {
 
     private final BookService bookService;
 
     @GetMapping
-    public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
+    public Page<BookResponse> getAllBooks(Pageable pageable) {
         return bookService.findAll(pageable)
-                .map((book) -> MapperUtil.parse(book, BookResponseDTO.class));
+                .map((book) -> MapperUtil.parse(book, BookResponse.class));
     }
 
     @GetMapping("{id}")
     public Book getBookById(@PathVariable UUID id) {
         return bookService.findBookByIdOrThrow(id);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    //TODO: Adicionar CreatedResource para retornar o Location do recurso criado
-    public BookResponseDTO createBook(@RequestBody @Valid BookCreateRequestDTO bookCreateRequestDTO) {
-        Book createdBook = bookService.createBook(bookCreateRequestDTO);
-        return MapperUtil.parse(createdBook, BookResponseDTO.class);
-    }
-
-    //TODO: receber entidade completa e atualizar todos os campos?
-    @PatchMapping("{id}")
-    public void updateBook(@PathVariable UUID id, @RequestBody BookUpdateRequestDTO bookUpdateRequestDTO) {
-        bookService.updateBook(id, bookUpdateRequestDTO);
-    }
-
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable UUID id) {
-        bookService.deleteBookById(id);
     }
 }
