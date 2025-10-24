@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-public class BookResponseDTO {
+public class BookResponse {
     private UUID id;
     private String title;
     private String isbn;

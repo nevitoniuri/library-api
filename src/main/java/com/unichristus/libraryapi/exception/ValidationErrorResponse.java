@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidationErrorResponseDTO extends ErrorResponseDTO {
-    private List<FieldErrorDTO> fieldErrors;
+public class ValidationErrorResponse extends ErrorResponse {
+    private List<FieldError> fieldErrors;
 }
 
