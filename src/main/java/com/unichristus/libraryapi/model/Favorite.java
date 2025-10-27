@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,18 +13,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@IdClass(FavoriteId.class)
-@Table(name = "favorites")
+@Table(
+        name = "favorites",
+        uniqueConstraints = @UniqueConstraint(name = "uk_favorites_user_book", columnNames = {"user_id", "book_id"})
+)
+@EqualsAndHashCode(of = "id")
 public class Favorite {
 
     @Id
-    @ManyToOne
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User user;
 
-    @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_id", nullable = false)
+    @ToString.Exclude
     private Book book;
 
     @CreationTimestamp

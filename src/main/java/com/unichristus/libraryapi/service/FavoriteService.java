@@ -8,25 +8,28 @@ import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
-    private final UserService userService;
     private final BookService bookService;
 
     public List<Favorite> findAll() {
         return favoriteRepository.findAll();
     }
 
-    public Favorite findFavoriteById(UUID id) {
+    public Page<Favorite> findAll(Pageable pageable) {
+        return favoriteRepository.findAll(pageable);
+    }
+
+    public Favorite findFavoriteByIdOrThrow(UUID id) {
         return favoriteRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ServiceError.FAVORITE_NOT_FOUND, id));
     }
@@ -35,9 +38,8 @@ public class FavoriteService {
         return favoriteRepository.findAllByUser(user);
     }
 
-    public List<Favorite> findFavoritesByUserId(UUID userId) {
-        User user = userService.findUserByIdOrThrow(userId);
-        return favoriteRepository.findAllByUser(user);
+    public Page<Favorite> findFavoritesByUser(User user, Pageable pageable) {
+        return favoriteRepository.findAllByUser(user, pageable);
     }
 
     public boolean isFavorite(UUID bookId, User user) {
@@ -64,13 +66,7 @@ public class FavoriteService {
     }
 
     public void deleteFavorite(UUID id) {
-        favoriteRepository.delete(findFavoriteById(id));
-    }
-
-    public void deleteByUserAndBook(UUID userId, UUID bookId) {
-        User user = userService.findUserByIdOrThrow(userId);
-        Book book = bookService.findBookByIdOrThrow(bookId);
-        favoriteRepository.deleteByUserAndBook(user, book);
+        favoriteRepository.delete(findFavoriteByIdOrThrow(id));
     }
 
     public void unfavoriteBook(UUID bookId, User user) {

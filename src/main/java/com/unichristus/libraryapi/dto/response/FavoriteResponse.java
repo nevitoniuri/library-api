@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public record FavoriteResponse(
         UUID id,
-        UUID userId,
         UUID bookId,
         String bookTitle,
         String bookIsbn,

@@ -21,7 +21,8 @@ public final class ServiceURIs {
     public static final String FAVORITES_RESOURCE = BASE_API + "/favorites";
 
     //Admin Paths
-    private static final String ADMIN = API + "/admin";
+    private static final String ADMIN = BASE_API + "/admin";
     public static final String ADMIN_USERS = ADMIN + USERS;
     public static final String BOOKS_ADMIN = ADMIN + BOOKS;
+    public static final String FAVORITES_ADMIN = ADMIN + "/favorites";
 }
