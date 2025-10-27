@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface ReadingRepository extends JpaRepository<Reading, UUID> {
@@ -33,22 +32,5 @@ public interface ReadingRepository extends JpaRepository<Reading, UUID> {
             @Param("book") Book book,
             @Param("status") ReadingStatus status
     );
-
-    @Query("SELECT r FROM Reading r WHERE r.user.id = :userId " +
-            "AND r.book.id = :bookId ORDER BY r.startedAt DESC")
-    List<Reading> findReadingHistory(
-            @Param("userId") UUID userId,
-            @Param("bookId") UUID bookId
-    );
-
-    Optional<Reading> findReadingByBookAndUserAndStatus(
-            Book book,
-            User user,
-            ReadingStatus status
-    );
-
-    @Query("SELECT r FROM Reading r WHERE r.user.id = :userId " +
-            "AND r.finishedAt IS NULL ORDER BY r.lastReadedAt DESC")
-    List<Reading> findActiveReadingsByUser(@Param("userId") UUID userId);
 
 }
