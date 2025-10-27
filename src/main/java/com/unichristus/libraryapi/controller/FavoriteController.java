@@ -3,17 +3,16 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.annotation.LoggedUser;
 import com.unichristus.libraryapi.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.dto.response.FavoriteResponse;
+import com.unichristus.libraryapi.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.service.FavoriteService;
 import com.unichristus.libraryapi.util.ServiceURIs;
-import com.unichristus.libraryapi.mapper.FavoriteResponseMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,9 +24,9 @@ public class FavoriteController {
 
     @GetMapping
     @Operation(summary = "Listar favoritos do usuário logado")
-    public Page<FavoriteResponse> getUserFavorites(@LoggedUser CustomUserDetails userDetails, Pageable pageable) {
-        return favoriteService.findFavoritesByUser(userDetails.toEntityReference(), pageable)
-                .map(FavoriteResponseMapper::toFavoriteResponse);
+    public List<FavoriteResponse> getUserFavorites(@LoggedUser UUID userId) {
+        return favoriteService.findFavoritesByUser(userId).stream()
+                .map(FavoriteResponseMapper::toFavoriteResponse).toList();
     }
 
     @PostMapping
@@ -54,8 +53,8 @@ public class FavoriteController {
     @Operation(summary = "Remover livro dos favoritos")
     public void unfavoriteBook(
             @PathVariable UUID bookId,
-            @LoggedUser CustomUserDetails userDetails
+            @LoggedUser UUID userId
     ) {
-        favoriteService.unfavoriteBook(bookId, userDetails.toEntityReference());
+        favoriteService.unfavoriteBook(bookId, userId);
     }
 }

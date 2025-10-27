@@ -72,8 +72,8 @@ public class FavoriteService {
         favoriteRepository.delete(findFavoriteByIdOrThrow(id));
     }
 
-    public void unfavoriteBook(UUID bookId, User user) {
+    public void unfavoriteBook(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
-        favoriteRepository.deleteByUserAndBook(user, book);
+        favoriteRepository.deleteByUserIdAndBook(userId, book);
     }
 }
