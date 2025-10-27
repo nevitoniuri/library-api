@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.controller;
 
 import com.unichristus.libraryapi.dto.response.BookResponse;
-import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.service.BookService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import com.unichristus.libraryapi.util.ServiceURIs;
@@ -23,13 +22,14 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
+    //TODO: Implementar filtros de busca (nome, autor, categoria, etc)
     public Page<BookResponse> getAllBooks(Pageable pageable) {
         return bookService.findAll(pageable)
                 .map((book) -> MapperUtil.parse(book, BookResponse.class));
     }
 
     @GetMapping("{id}")
-    public Book getBookById(@PathVariable UUID id) {
-        return bookService.findBookByIdOrThrow(id);
+    public BookResponse getBookById(@PathVariable UUID id) {
+        return MapperUtil.parse(bookService.findBookByIdOrThrow(id), BookResponse.class);
     }
 }

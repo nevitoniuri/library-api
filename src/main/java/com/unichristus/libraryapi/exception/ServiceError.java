@@ -15,6 +15,9 @@ public enum ServiceError {
     //BOOK ERRORS
     BOOK_NOT_FOUND("BOOK_NOT_FOUND", HttpStatus.NOT_FOUND, "Livro não encontrado: {}"),
     ISBN_ALREADY_EXISTS("ISBN_ALREADY_EXISTS", HttpStatus.CONFLICT, "Já existe um livro cadastrado com o ISBN: {}"),
+    BOOK_PDF_ALREADY_EXISTS("BOOK_PDF_ALREADY_EXISTS", HttpStatus.CONFLICT, "O livro já possui um arquivo PDF enviado: {}"),
+    BOOK_PDF_NOT_AVAILABLE("BOOK_PDF_NOT_AVAILABLE", HttpStatus.BAD_REQUEST, "O livro não possui um arquivo PDF enviado: {}"),
+    BOOK_PDF_SIZE_EXCEEDED("BOOK_PDF_SIZE_EXCEEDED", HttpStatus.BAD_REQUEST, "O tamanho do arquivo PDF excede o limite permitido de {} MB"),
 
     //READING ERRORS
     READING_NOT_FOUND("READING_NOT_FOUND", HttpStatus.NOT_FOUND, "Leitura não encontrada: {}"),

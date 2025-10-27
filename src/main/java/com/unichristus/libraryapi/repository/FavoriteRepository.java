@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, UUID> {
+    List<Favorite> findAllByUserId(UUID userId);
     List<Favorite> findAllByUser(User user);
     Page<Favorite> findAllByUser(User user, Pageable pageable);
     Optional<Favorite> findByUserAndBook(User user, Book book);

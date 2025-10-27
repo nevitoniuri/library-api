@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.config;
 
 import com.unichristus.libraryapi.security.JwtAuthenticationFilter;
+import com.unichristus.libraryapi.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,19 +32,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Rotas públicas
-                        .requestMatchers("/auth/**").permitAll()
-
-                        // ✅ Swagger e documentação
+                        .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
                         .requestMatchers(
+                                "/api/v1/auth/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                                "/webjars/**"
+                                "/v3/api-docs/**"
                         ).permitAll()
-
-                        // 🔒 Todo o restante precisa de autenticação
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

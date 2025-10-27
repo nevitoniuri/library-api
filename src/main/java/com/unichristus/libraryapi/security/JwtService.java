@@ -5,13 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -23,11 +23,13 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    // Gera token com userId como subject
     public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", userDetails.getEmail());
-        // userId como SUBJECT (identificador principal)
+        claims.put("roles", userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList());
         return createToken(claims, userDetails.getId().toString());
     }
 
@@ -49,6 +51,17 @@ public class JwtService {
     public UUID extractUserId(String token) {
         String userId = extractClaim(token, Claims::getSubject);
         return UUID.fromString(userId);
+    }
+
+    public UsernamePasswordAuthenticationToken getAuthentication(String token) {
+        Claims claims = extractAllClaims(token);
+
+        List<String> roles = claims.get("roles", List.class);
+        Collection<? extends GrantedAuthority> authorities =
+                roles.stream().map(SimpleGrantedAuthority::new).toList();
+
+        String subject = claims.getSubject();
+        return new UsernamePasswordAuthenticationToken(UUID.fromString(subject), null, authorities);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

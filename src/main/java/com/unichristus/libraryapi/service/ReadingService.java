@@ -1,7 +1,7 @@
 package com.unichristus.libraryapi.service;
 
+import com.unichristus.libraryapi.dto.response.StartReadingResponse;
 import com.unichristus.libraryapi.mapper.ReadingResponseMapper;
-import com.unichristus.libraryapi.dto.response.ReadingResponse;
 import com.unichristus.libraryapi.enums.ReadingStatus;
 import com.unichristus.libraryapi.exception.ServiceError;
 import com.unichristus.libraryapi.exception.ServiceException;
@@ -29,19 +29,23 @@ public class ReadingService {
                 .orElseThrow(() -> new ServiceException(ServiceError.READING_NOT_FOUND, readingId));
     }
 
-    public List<Reading> findReadingsByUser(User user) {
-        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(user);
+    public List<Reading> findReadingsByUser(UUID userId) {
+        return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(userId);
     }
 
     public boolean hasInProgressReading(User user, Book book) {
         return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public ReadingResponse startReading(UUID bookId, User user) {
+    public StartReadingResponse startReading(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
+        if (!book.isHasPdf()) {
+            throw new ServiceException(ServiceError.BOOK_PDF_NOT_AVAILABLE, book.getTitle());
+        }
         LocalDateTime now = LocalDateTime.now();
+        User user = User.builder().id(userId).build();
         if (hasInProgressReading(user, book)) {
-            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY, user.getEmail(), book.getTitle());
+            throw new ServiceException(ServiceError.READING_IN_PROGRESS_ALREADY, userId, book.getTitle());
         }
         Reading reading = Reading.builder()
                 .book(book)
@@ -52,12 +56,13 @@ public class ReadingService {
                 .lastReadedAt(now)
                 .build();
         Reading saved = readingRepository.save(reading);
-        return ReadingResponseMapper.toReadingResponse(saved, favoriteService.isFavorite(book, user));
+        String bookPdfUrl = bookService.getBookPdfUrl(book);
+        return ReadingResponseMapper.toStartReadingResponse(saved, favoriteService.isFavorite(book, user), bookPdfUrl);
     }
 
-    public void updateReadingProgress(UUID readingId, User user, Integer newCurrentPage) {
+    public void updateReadingProgress(UUID readingId, UUID userId, Integer newCurrentPage) {
         Reading reading = findByIdOrThrow(readingId);
-        if (!user.getId().equals(reading.getUser().getId())) {
+        if (!userId.equals(reading.getUser().getId())) {
             throw new ServiceException(ServiceError.READING_BELONGS_TO_ANOTHER_USER, readingId);
         }
         if (reading.getStatus() == ReadingStatus.FINISHED) {

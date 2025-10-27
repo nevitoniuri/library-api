@@ -19,6 +19,9 @@ public record BookCreateRequest(
         @NotNull
         @Past
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        LocalDate publicationDate
+        LocalDate publicationDate,
+
+        @NotBlank
+        String coverUrl
 ) {
 }

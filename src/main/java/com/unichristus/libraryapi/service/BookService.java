@@ -7,9 +7,11 @@ import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -18,9 +20,13 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final FileStorageService fileStorageService;
+
+    @Value("${minio.bucket.max-size-mb}")
+    private int maxFileSizeMb;
 
     public Page<Book> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+        return bookRepository.findBooksByHasPdfTrue(pageable);
     }
 
     public Book findBookByIdOrThrow(UUID id) {
@@ -30,6 +36,23 @@ public class BookService {
 
     public Book save(Book book) {
         return bookRepository.save(book);
+    }
+
+    public String getBookPdfUrl(Book book) {
+        return fileStorageService.generatePresignedUrl(book.getId().toString());
+    }
+
+    public void uploadBookPdf(UUID bookId, MultipartFile file) {
+        Book book = findBookByIdOrThrow(bookId);
+        if (book.isHasPdf()) {
+            throw new ServiceException(ServiceError.BOOK_PDF_ALREADY_EXISTS, bookId);
+        }
+        if (file.getSize() > maxFileSizeMb) {
+            throw new ServiceException(ServiceError.BOOK_PDF_SIZE_EXCEEDED, maxFileSizeMb);
+        }
+        fileStorageService.uploadPdf(file, book.getId().toString());
+        book.setHasPdf(true);
+        save(book);
     }
 
     public Book createBook(BookCreateRequest dto) {

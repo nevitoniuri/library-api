@@ -3,8 +3,7 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.annotation.LoggedUser;
 import com.unichristus.libraryapi.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.dto.request.UpdateReadingProgressRequest;
-import com.unichristus.libraryapi.dto.response.ReadingResponse;
-import com.unichristus.libraryapi.security.CustomUserDetails;
+import com.unichristus.libraryapi.dto.response.StartReadingResponse;
 import com.unichristus.libraryapi.service.ReadingService;
 import com.unichristus.libraryapi.util.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,11 +35,11 @@ public class ReadingController {
             @ApiResponse(responseCode = "409", description = "Já existe uma leitura ativa deste livro")
     })
     @PostMapping
-    public ResponseEntity<ReadingResponse> startReading(
+    public ResponseEntity<StartReadingResponse> startReading(
             @RequestBody @Valid StartReadingRequest request,
-            @LoggedUser CustomUserDetails userDetails
+            @LoggedUser UUID userId
     ) {
-        ReadingResponse readingResponse = readingService.startReading(request.bookId(), userDetails.toEntityReference());
+        StartReadingResponse readingResponse = readingService.startReading(request.bookId(), userId);
         return ResponseEntity.created(URI.create(ServiceURIs.READINGS_RESOURCE + "/" + readingResponse.getId())).body(readingResponse);
     }
 
@@ -55,8 +54,8 @@ public class ReadingController {
     public void updateReadingProgress(
             @PathVariable UUID readingId,
             @RequestBody @Valid UpdateReadingProgressRequest request,
-            @LoggedUser CustomUserDetails userDetails
+            @LoggedUser UUID userId
     ) {
-        readingService.updateReadingProgress(readingId, userDetails.toEntityReference(), request.currentPage());
+        readingService.updateReadingProgress(readingId, userId, request.currentPage());
     }
 }
