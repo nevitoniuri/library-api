@@ -16,10 +16,10 @@ public interface ReadingRepository extends JpaRepository<Reading, UUID> {
 
     @Query("""
             SELECT r FROM Reading r
-            WHERE r.user = :user
+            WHERE r.user.id = :userid
             ORDER BY r.lastReadedAt DESC
             """)
-    List<Reading> findReadingsByUserOrderByLastReadedAtDesc(User user);
+    List<Reading> findReadingsByUserOrderByLastReadedAtDesc(UUID userid);
 
     @Query("""
             SELECT COUNT(r) > 0

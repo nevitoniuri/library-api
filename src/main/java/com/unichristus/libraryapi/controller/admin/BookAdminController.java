@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -20,10 +20,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping(ServiceURIs.BOOKS_ADMIN)
 @Tag(name = "Admin - Books")
-@PreAuthorize("hasRole('ADMIN')")
 public class BookAdminController {
 
     private final BookService bookService;
+
+    @PostMapping(path = "/{bookId}/upload", consumes = {"multipart/form-data"})
+    public void uploadBook(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
+        bookService.uploadBookPdf(bookId, file);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

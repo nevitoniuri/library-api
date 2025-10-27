@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.config;
 
 import com.unichristus.libraryapi.security.JwtAuthenticationFilter;
+import com.unichristus.libraryapi.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,15 +32,18 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(
+                                "/api/v1/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

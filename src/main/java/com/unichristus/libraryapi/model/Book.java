@@ -35,6 +35,12 @@ public class Book {
     @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
 
+    @Column(name = "cover_url", nullable = false)
+    private String coverUrl;
+
+    @Column(name = "has_pdf", nullable = false)
+    private boolean hasPdf;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;

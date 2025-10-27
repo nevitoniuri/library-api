@@ -8,19 +8,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -46,26 +43,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
 
-            // Extrai e valida em uma tacada
-            final UUID userId = jwtService.extractUserId(jwt);
+            UsernamePasswordAuthenticationToken authentication = jwtService.getAuthentication(jwt);
 
-            // Carrega usuário
-            CustomUserDetails userDetails = userDetailsService.loadUserById(userId);
-
-            // Early return: Usuário inativo/bloqueado
-            if (!userDetails.isEnabled() || !userDetails.isAccountNonLocked()) {
-                filterChain.doFilter(request, response);
-                return;
+            if (authentication != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
-            // Autentica
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
         } catch (Exception e) {
             // Log do erro mas não bloqueia a requisição
             logger.error("Erro ao processar JWT", e);

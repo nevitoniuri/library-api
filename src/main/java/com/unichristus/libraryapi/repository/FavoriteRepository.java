@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, UUID> {
-    List<Favorite> findAllByUser(User user);
+    List<Favorite> findAllByUserId(UUID userId);
     Optional<Favorite> findByUserAndBook(User user, Book book);
     boolean existsByUserAndBook(User user, Book book);
     void deleteByUserAndBook(User user, Book book);

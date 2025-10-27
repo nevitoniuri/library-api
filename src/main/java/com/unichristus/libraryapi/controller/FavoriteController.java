@@ -3,7 +3,6 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.annotation.LoggedUser;
 import com.unichristus.libraryapi.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.dto.response.FavoriteResponse;
-import com.unichristus.libraryapi.security.CustomUserDetails;
 import com.unichristus.libraryapi.service.FavoriteService;
 import com.unichristus.libraryapi.util.MapperUtil;
 import com.unichristus.libraryapi.util.ServiceURIs;
@@ -38,9 +37,9 @@ public class FavoriteController {
     @Operation(summary = "Favoritar livro")
     public void favoriteBook(
             @RequestBody @Valid FavoriteBookRequest request,
-            @LoggedUser CustomUserDetails userDetails
+            @LoggedUser UUID userId
     ) {
-        favoriteService.favoriteBook(request.bookId(), userDetails.toEntityReference());
+        favoriteService.favoriteBook(request.bookId(), userId);
     }
 
     //TODO: Testar
@@ -48,9 +47,9 @@ public class FavoriteController {
     @Operation(summary = "Verificar se livro é favorito")
     public boolean isFavorite(
             @PathVariable UUID bookId,
-            @LoggedUser CustomUserDetails userDetails
+            @LoggedUser UUID userId
     ) {
-        return favoriteService.isFavorite(bookId, userDetails.toEntityReference());
+        return favoriteService.isFavorite(bookId, userId);
     }
 
     //TODO: renomear para unfavoriteBook, receber bookId na url e receber usuario logado

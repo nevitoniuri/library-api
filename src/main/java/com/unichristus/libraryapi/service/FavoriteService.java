@@ -31,27 +31,28 @@ public class FavoriteService {
                 .orElseThrow(() -> new ServiceException(ServiceError.FAVORITE_NOT_FOUND, id));
     }
 
-    public List<Favorite> findFavoritesByUser(User user) {
-        return favoriteRepository.findAllByUser(user);
+    public List<Favorite> findFavoritesByUser(UUID userId) {
+        return favoriteRepository.findAllByUserId(userId);
     }
 
     public List<Favorite> findFavoritesByUserId(UUID userId) {
         User user = userService.findUserByIdOrThrow(userId);
-        return favoriteRepository.findAllByUser(user);
+        return favoriteRepository.findAllByUserId(user.getId());
     }
 
-    public boolean isFavorite(UUID bookId, User user) {
+    public boolean isFavorite(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
-        return isFavorite(book, user);
+        return isFavorite(book, User.builder().id(userId).build());
     }
 
     public boolean isFavorite(Book book, User user) {
         return favoriteRepository.existsByUserAndBook(user, book);
     }
 
-    public void favoriteBook(UUID bookId, User user) {
+    public void favoriteBook(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
-        if (favoriteRepository.existsByUserAndBook(user, book)) {
+        User user = User.builder().id(userId).build();
+        if (isFavorite(book, user)) {
             throw new ServiceException(ServiceError.FAVORITE_ALREADY_EXISTS);
         }
 

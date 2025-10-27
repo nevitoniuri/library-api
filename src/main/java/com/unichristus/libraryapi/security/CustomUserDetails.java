@@ -20,6 +20,7 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private String password;
     private boolean active;
+    private Role role;
 
     public static CustomUserDetails from(User user) {
         return new CustomUserDetails(
@@ -27,7 +28,8 @@ public class CustomUserDetails implements UserDetails {
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getActive()
+                user.getActive(),
+                user.getRole()
         );
     }
 
@@ -43,7 +45,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(Role.USER.name()));
+        return List.of(new SimpleGrantedAuthority(getRole().name()));
     }
 
     @Override

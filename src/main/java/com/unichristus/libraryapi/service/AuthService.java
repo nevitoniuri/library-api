@@ -8,6 +8,7 @@ import com.unichristus.libraryapi.exception.ServiceException;
 import com.unichristus.libraryapi.model.User;
 import com.unichristus.libraryapi.security.CustomUserDetails;
 import com.unichristus.libraryapi.security.JwtService;
+import com.unichristus.libraryapi.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,7 @@ public class AuthService {
                         .name(request.name().trim())
                         .email(request.email())
                         .password(passwordEncoder.encode(request.password()))
+                        .role(Role.USER)
                         .active(Boolean.TRUE).build()
         );
         return generateToken(savedUser);

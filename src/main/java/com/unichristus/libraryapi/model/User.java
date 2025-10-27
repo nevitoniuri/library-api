@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.model;
 
+import com.unichristus.libraryapi.security.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,10 @@ public class User {
 
     @Column(name = "active", nullable = false)
     private Boolean active = true;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private Role role;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

@@ -8,12 +8,12 @@ import com.unichristus.libraryapi.enums.ReadingStatus;
 import com.unichristus.libraryapi.model.Book;
 import com.unichristus.libraryapi.model.Favorite;
 import com.unichristus.libraryapi.model.Reading;
-import com.unichristus.libraryapi.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +22,9 @@ public class HomeService {
     private final ReadingService readingService;
     private final FavoriteService favoriteService;
 
-    public HomeResponse resume(User user) {
-        List<Reading> readings = readingService.findReadingsByUser(user);
-        List<Book> favoriteBooks = favoriteService.findFavoritesByUser(user)
+    public HomeResponse resume(UUID userId) {
+        List<Reading> readings = readingService.findReadingsByUser(userId);
+        List<Book> favoriteBooks = favoriteService.findFavoritesByUser(userId)
                 .stream()
                 .map(Favorite::getBook)
                 .toList();

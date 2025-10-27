@@ -8,6 +8,8 @@ CREATE TABLE books
     isbn             VARCHAR(13)  NOT NULL,
     number_of_pages  INTEGER      NOT NULL CHECK (number_of_pages >= 1),
     publication_date DATE         NOT NULL,
+    cover_url        VARCHAR(512),
+    has_pdf          BOOLEAN      NOT NULL DEFAULT FALSE,
     created_at       TIMESTAMPTZ  NOT NULL DEFAULT now(),
     updated_at       TIMESTAMPTZ  NOT NULL DEFAULT now(),
     CONSTRAINT uq_books_isbn UNIQUE (isbn)
