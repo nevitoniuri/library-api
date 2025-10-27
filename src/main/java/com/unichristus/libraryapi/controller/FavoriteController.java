@@ -3,8 +3,8 @@ package com.unichristus.libraryapi.controller;
 import com.unichristus.libraryapi.annotation.LoggedUser;
 import com.unichristus.libraryapi.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.dto.response.FavoriteResponse;
+import com.unichristus.libraryapi.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.service.FavoriteService;
-import com.unichristus.libraryapi.util.MapperUtil;
 import com.unichristus.libraryapi.util.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,15 +22,13 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-    //TODO: Corrigir endpoint, renomear para "getUserFavorites" e receber usuário logado.
-    @GetMapping()
-    public List<FavoriteResponse> getFavoritesByUser(@PathVariable UUID userId) {
-        return favoriteService.findFavoritesByUserId(userId).stream()
-                .map(favorite -> MapperUtil.parse(favorite, FavoriteResponse.class))
-                .collect(Collectors.toList());
+    @GetMapping
+    @Operation(summary = "Listar favoritos do usuário logado")
+    public List<FavoriteResponse> getUserFavorites(@LoggedUser UUID userId) {
+        return favoriteService.findFavoritesByUser(userId).stream()
+                .map(FavoriteResponseMapper::toFavoriteResponse).toList();
     }
 
-    //TODO: Testar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Favoritar livro")
@@ -42,7 +39,6 @@ public class FavoriteController {
         favoriteService.favoriteBook(request.bookId(), userId);
     }
 
-    //TODO: Testar
     @GetMapping("/{bookId}")
     @Operation(summary = "Verificar se livro é favorito")
     public boolean isFavorite(
@@ -52,12 +48,13 @@ public class FavoriteController {
         return favoriteService.isFavorite(bookId, userId);
     }
 
-    //TODO: renomear para unfavoriteBook, receber bookId na url e receber usuario logado
-    @DeleteMapping
+    @DeleteMapping("/{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteByUserAndBook(
-            @RequestParam UUID userId,
-            @RequestParam UUID bookId) {
-        favoriteService.deleteByUserAndBook(userId, bookId);
+    @Operation(summary = "Remover livro dos favoritos")
+    public void unfavoriteBook(
+            @PathVariable UUID bookId,
+            @LoggedUser UUID userId
+    ) {
+        favoriteService.unfavoriteBook(bookId, userId);
     }
 }
