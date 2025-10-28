@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.domain.user;
 
-import com.unichristus.libraryapi.infra.security.Role;
+import com.unichristus.libraryapi.infrastructure.security.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

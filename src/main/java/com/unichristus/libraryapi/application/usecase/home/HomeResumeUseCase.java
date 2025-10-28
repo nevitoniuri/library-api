@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.application.service;
+package com.unichristus.libraryapi.application.usecase.home;
 
 import com.unichristus.libraryapi.application.mapper.ReadingResponseMapper;
 import com.unichristus.libraryapi.application.dto.response.HomeResponse;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HomeService {
+public class HomeResumeUseCase {
 
     private final ReadingService readingService;
     private final FavoriteService favoriteService;

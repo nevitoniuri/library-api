@@ -1,5 +1,6 @@
-package com.unichristus.libraryapi.infra.storage;
+package com.unichristus.libraryapi.infrastructure.storage;
 
+import com.unichristus.libraryapi.infrastructure.storage.exception.FileStorageException;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.http.Method;
@@ -16,15 +17,25 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-public class FileStorageService {
+public class MinioFileStorageService {
 
     private final MinioClient minioClient;
 
     @Value("${minio.bucket.files}")
     private String filesBucket;
 
+    @Value("${minio.bucket.max-size-mb}")
+    private int maxFileSizeMb;
+
     public void uploadPdf(MultipartFile file, String objectName) {
+        validateFileSize(file);
         uploadFile(file, filesBucket, objectName);
+    }
+
+    private void validateFileSize(MultipartFile file) {
+        if (file.getSize() > (long) maxFileSizeMb * 1024 * 1024) {
+            throw new FileStorageException("File exceeded limit");
+        }
     }
 
     private void uploadFile(MultipartFile file, String bucket, String objectName) {

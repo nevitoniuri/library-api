@@ -1,7 +1,7 @@
-package com.unichristus.libraryapi.infra.config;
+package com.unichristus.libraryapi.infrastructure.config;
 
-import com.unichristus.libraryapi.infra.security.JwtAuthenticationFilter;
-import com.unichristus.libraryapi.infra.security.Role;
+import com.unichristus.libraryapi.infrastructure.security.JwtAuthenticationFilter;
+import com.unichristus.libraryapi.infrastructure.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

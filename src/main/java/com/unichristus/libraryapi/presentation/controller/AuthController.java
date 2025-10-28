@@ -3,7 +3,7 @@ package com.unichristus.libraryapi.presentation.controller;
 import com.unichristus.libraryapi.application.dto.request.LoginRequest;
 import com.unichristus.libraryapi.application.dto.request.UserRegisterRequest;
 import com.unichristus.libraryapi.application.dto.response.AuthResponse;
-import com.unichristus.libraryapi.application.service.AuthService;
+import com.unichristus.libraryapi.application.usecase.auth.AuthUseCase;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ServiceURIs.AUTH_RESOURCE)
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthUseCase authUseCase;
 
     @Operation(summary = "Registrar novo usuário", description = "Registra um novo usuário no sistema")
     @ApiResponses(value = {
@@ -33,7 +33,7 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@RequestBody @Valid UserRegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.ok(authUseCase.register(request));
     }
 
     @Operation(summary = "Login de usuário", description = "Realiza o login de um usuário existente")
@@ -45,6 +45,6 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(authUseCase.login(request));
     }
 }

@@ -3,10 +3,10 @@ package com.unichristus.libraryapi.presentation.controller;
 import com.unichristus.libraryapi.application.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.application.dto.request.UpdateReadingProgressRequest;
 import com.unichristus.libraryapi.application.dto.response.StartReadingResponse;
-import com.unichristus.libraryapi.application.service.StartReadingService;
+import com.unichristus.libraryapi.application.usecase.reading.StartReadingUseCase;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
 import com.unichristus.libraryapi.domain.reading.ReadingService;
-import com.unichristus.libraryapi.infra.security.LoggedUser;
+import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @Tag(name = "Readings", description = "Gerenciamento de leituras")
 public class ReadingController {
 
-    private final StartReadingService startReadingService;
+    private final StartReadingUseCase startReadingUseCase;
     private final ReadingService readingService;
 
     @Operation(summary = "Iniciar nova leitura", description = "Inicia uma nova leitura de um livro")
@@ -41,7 +41,7 @@ public class ReadingController {
             @RequestBody @Valid StartReadingRequest request,
             @LoggedUser UUID userId
     ) {
-        StartReadingResponse readingResponse = startReadingService.startReading(request.bookId(), userId);
+        StartReadingResponse readingResponse = startReadingUseCase.startReading(request.bookId(), userId);
         return ResponseEntity.created(URI.create(ServiceURIs.READINGS_RESOURCE + "/" + readingResponse.getId())).body(readingResponse);
     }
 

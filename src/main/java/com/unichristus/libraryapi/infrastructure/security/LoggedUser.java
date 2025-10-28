@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.infra.security;
+package com.unichristus.libraryapi.infrastructure.security;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

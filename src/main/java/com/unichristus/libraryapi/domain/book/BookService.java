@@ -2,14 +2,10 @@ package com.unichristus.libraryapi.domain.book;
 
 import com.unichristus.libraryapi.domain.book.exception.BookIsbnConflict;
 import com.unichristus.libraryapi.domain.book.exception.BookNotFoundException;
-import com.unichristus.libraryapi.domain.book.exception.BookPdfSizeExceeded;
-import com.unichristus.libraryapi.infra.storage.FileStorageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -19,10 +15,6 @@ import java.util.UUID;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final FileStorageService fileStorageService;
-
-    @Value("${minio.bucket.max-size-mb}")
-    private int maxFileSizeMb;
 
     public Page<Book> findAll(Pageable pageable) {
         return bookRepository.findBooksByHasPdfTrue(pageable);
@@ -35,20 +27,6 @@ public class BookService {
 
     public Book save(Book book) {
         return bookRepository.save(book);
-    }
-
-    public String getBookPdfUrl(Book book) {
-        return fileStorageService.generatePresignedUrl(book.getId().toString());
-    }
-
-    public void uploadBookPdf(UUID bookId, MultipartFile file) {
-        Book book = findBookByIdOrThrow(bookId);
-        if (file.getSize() > maxFileSizeMb) {
-            throw new BookPdfSizeExceeded(maxFileSizeMb);
-        }
-        fileStorageService.uploadPdf(file, book.getId().toString());
-        book.setHasPdf(true);
-        save(book);
     }
 
     public Book createBook(String title, String isbn, Integer numberOfPages, LocalDate publicationDate, String coverUrl) {

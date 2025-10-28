@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.infra.config;
+package com.unichristus.libraryapi.infrastructure.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

@@ -1,12 +1,9 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.favorite.exception.FavoriteAlreadyExistsException;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +14,23 @@ import java.util.UUID;
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
-    private final BookService bookService;
 
-    public Page<Favorite> findAll(Pageable pageable) {
-        return favoriteRepository.findAll(pageable);
+    public List<Favorite> findAll(int page, int size) {
+        return favoriteRepository.findAll(page, size);
     }
 
     public List<Favorite> findFavoritesByUser(UUID userId) {
         return favoriteRepository.findAllByUserId(userId);
     }
 
-    public boolean isFavorite(UUID bookId, UUID userId) {
-        Book book = bookService.findBookByIdOrThrow(bookId);
-        return isFavorite(book, User.builder().id(userId).build());
-    }
-
     public boolean isFavorite(Book book, User user) {
         return favoriteRepository.existsByUserAndBook(user, book);
     }
 
-    public void favoriteBook(UUID bookId, UUID userId) {
-        Book book = bookService.findBookByIdOrThrow(bookId);
-        User user = User.builder().id(userId).build();
+    public void createFavorite(Book book, User user) {
         if (isFavorite(book, user)) {
-            throw new FavoriteAlreadyExistsException(userId, bookId);
+            throw new FavoriteAlreadyExistsException(user.getId(), book.getId());
         }
-
         Favorite favorite = Favorite.builder()
                 .user(user)
                 .book(book)
@@ -51,8 +39,7 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
     }
 
-    public void unfavoriteBook(UUID bookId, UUID userId) {
-        Book book = bookService.findBookByIdOrThrow(bookId);
+    public void unfavoriteBook(Book book, UUID userId) {
         favoriteRepository.deleteByUserIdAndBook(userId, book);
     }
 }

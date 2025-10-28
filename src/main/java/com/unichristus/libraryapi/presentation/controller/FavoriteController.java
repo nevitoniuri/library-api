@@ -3,9 +3,10 @@ package com.unichristus.libraryapi.presentation.controller;
 import com.unichristus.libraryapi.application.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
+import com.unichristus.libraryapi.application.usecase.favorite.FavoriteBookUseCase;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
-import com.unichristus.libraryapi.infra.security.LoggedUser;
+import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final FavoriteBookUseCase favoriteBookUseCase;
 
     @GetMapping
     @Operation(summary = "Listar favoritos do usuário logado")
@@ -36,7 +38,7 @@ public class FavoriteController {
             @RequestBody @Valid FavoriteBookRequest request,
             @LoggedUser UUID userId
     ) {
-        favoriteService.favoriteBook(request.bookId(), userId);
+        favoriteBookUseCase.favoriteBook(request.bookId(), userId);
     }
 
     @GetMapping("/{bookId}")
@@ -45,7 +47,7 @@ public class FavoriteController {
             @PathVariable UUID bookId,
             @LoggedUser UUID userId
     ) {
-        return favoriteService.isFavorite(bookId, userId);
+        return favoriteBookUseCase.isFavorite(bookId, userId);
     }
 
     @DeleteMapping("/{bookId}")
@@ -55,6 +57,6 @@ public class FavoriteController {
             @PathVariable UUID bookId,
             @LoggedUser UUID userId
     ) {
-        favoriteService.unfavoriteBook(bookId, userId);
+        favoriteBookUseCase.unfavoriteBook(bookId, userId);
     }
 }

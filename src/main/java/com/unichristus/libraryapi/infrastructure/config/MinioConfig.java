@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.infra.config;
+package com.unichristus.libraryapi.infrastructure.config;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;

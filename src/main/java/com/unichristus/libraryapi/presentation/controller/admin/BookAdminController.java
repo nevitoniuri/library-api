@@ -3,6 +3,7 @@ package com.unichristus.libraryapi.presentation.controller.admin;
 import com.unichristus.libraryapi.application.dto.request.BookCreateRequest;
 import com.unichristus.libraryapi.application.dto.request.BookUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.BookResponse;
+import com.unichristus.libraryapi.application.usecase.book.BookPdfUseCase;
 import com.unichristus.libraryapi.application.util.MapperUtil;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
 import com.unichristus.libraryapi.domain.book.Book;
@@ -23,10 +24,11 @@ import java.util.UUID;
 public class BookAdminController {
 
     private final BookService bookService;
+    private final BookPdfUseCase bookPdfUseCase;
 
     @PostMapping(path = "/{bookId}/upload", consumes = {"multipart/form-data"})
     public void uploadBook(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
-        bookService.uploadBookPdf(bookId, file);
+        bookPdfUseCase.uploadBookPdf(bookId, file);
     }
 
     @PostMapping

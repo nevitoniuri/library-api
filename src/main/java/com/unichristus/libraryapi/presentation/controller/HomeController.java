@@ -1,9 +1,9 @@
 package com.unichristus.libraryapi.presentation.controller;
 
 import com.unichristus.libraryapi.application.dto.response.HomeResponse;
-import com.unichristus.libraryapi.application.service.HomeService;
+import com.unichristus.libraryapi.application.usecase.home.HomeResumeUseCase;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
-import com.unichristus.libraryapi.infra.security.LoggedUser;
+import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +16,10 @@ import java.util.UUID;
 @RequestMapping(ServiceURIs.HOME_RESOURCE)
 public class HomeController {
 
-    private final HomeService homeService;
+    private final HomeResumeUseCase homeResumeUseCase;
 
     @GetMapping("resume")
     public HomeResponse resume(@LoggedUser UUID userId) {
-         return homeService.resume(userId);
+         return homeResumeUseCase.resume(userId);
     }
 }

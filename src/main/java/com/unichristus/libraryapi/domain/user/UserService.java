@@ -5,9 +5,9 @@ import com.unichristus.libraryapi.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,7 +16,11 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordHasher passwordHasher;
+
+    public List<User> findAll(int page, int size) {
+        return userRepository.findAll(page, size);
+    }
 
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
@@ -55,7 +59,7 @@ public class UserService {
         }
 
         if (password != null && !password.isEmpty()) {
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(passwordHasher.hash(password));
             changed = true;
         }
 

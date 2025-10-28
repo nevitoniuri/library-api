@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.infra.security;
+package com.unichristus.libraryapi.infrastructure.security;
 
 import com.unichristus.libraryapi.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
