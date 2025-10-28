@@ -22,7 +22,7 @@ public class StartReadingService {
     private final FavoriteService favoriteService;
 
     public StartReadingResponse startReading(UUID bookId, UUID userId) {
-        Reading reading = readingService.startReading(bookId, userId);
+        Reading reading = readingService.createReading(bookId, userId);
         Book book = reading.getBook();
         User user = reading.getUser();
         boolean isFavorite = favoriteService.isFavorite(book, user);

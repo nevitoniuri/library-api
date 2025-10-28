@@ -31,7 +31,7 @@ public class ReadingService {
         return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public Reading startReading(UUID bookId, UUID userId) throws PdfNotAvailableException {
+    public Reading createReading(UUID bookId, UUID userId) throws PdfNotAvailableException {
         Book book = bookService.findBookByIdOrThrow(bookId);
         if (!book.isHasPdf()) {
             throw new PdfNotAvailableException(bookId);
