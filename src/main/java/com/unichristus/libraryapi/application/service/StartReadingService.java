@@ -16,6 +16,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class StartReadingService {
+
     private final ReadingService readingService;
     private final BookService bookService;
     private final FavoriteService favoriteService;
