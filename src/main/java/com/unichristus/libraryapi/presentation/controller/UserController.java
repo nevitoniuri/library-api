@@ -1,17 +1,17 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.infra.security.LoggedUser;
 import com.unichristus.libraryapi.application.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
-import com.unichristus.libraryapi.infra.security.CustomUserDetails;
-import com.unichristus.libraryapi.domain.user.UserService;
 import com.unichristus.libraryapi.application.util.MapperUtil;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.domain.user.UserService;
+import com.unichristus.libraryapi.infra.security.CustomUserDetails;
+import com.unichristus.libraryapi.infra.security.LoggedUser;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequiredArgsConstructor

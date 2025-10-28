@@ -1,12 +1,12 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.application.service.StartReadingService;
-import com.unichristus.libraryapi.infra.security.LoggedUser;
 import com.unichristus.libraryapi.application.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.application.dto.request.UpdateReadingProgressRequest;
 import com.unichristus.libraryapi.application.dto.response.StartReadingResponse;
-import com.unichristus.libraryapi.domain.reading.ReadingService;
+import com.unichristus.libraryapi.application.service.StartReadingService;
 import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.domain.reading.ReadingService;
+import com.unichristus.libraryapi.infra.security.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
