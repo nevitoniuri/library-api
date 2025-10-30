@@ -2,7 +2,7 @@ package com.unichristus.libraryapi.presentation.controller;
 
 import com.unichristus.libraryapi.application.dto.response.HomeResponse;
 import com.unichristus.libraryapi.application.usecase.home.HomeResumeUseCase;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

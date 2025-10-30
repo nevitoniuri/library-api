@@ -1,8 +1,9 @@
 package com.unichristus.libraryapi.presentation.controller.admin;
 
+import com.unichristus.libraryapi.application.common.MapperUtil;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
-import com.unichristus.libraryapi.application.util.MapperUtil;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,8 @@ public class FavoriteAdminController {
     @GetMapping
     @Operation(summary = "Listar todos os favoritos (admin)")
     public Page<FavoriteResponse> getAll(Pageable pageable) {
-        List<FavoriteResponse> favorites = favoriteService.findAll(pageable.getPageNumber(), pageable.getPageSize())
+        var pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
+        List<FavoriteResponse> favorites = favoriteService.findAll(pageRequest)
                 .stream()
                 .map(favorite -> MapperUtil.parse(favorite, FavoriteResponse.class))
                 .toList();

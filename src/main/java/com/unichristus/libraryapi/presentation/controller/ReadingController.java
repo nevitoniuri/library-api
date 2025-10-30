@@ -4,7 +4,7 @@ import com.unichristus.libraryapi.application.dto.request.StartReadingRequest;
 import com.unichristus.libraryapi.application.dto.request.UpdateReadingProgressRequest;
 import com.unichristus.libraryapi.application.dto.response.StartReadingResponse;
 import com.unichristus.libraryapi.application.usecase.reading.StartReadingUseCase;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.domain.reading.ReadingService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;

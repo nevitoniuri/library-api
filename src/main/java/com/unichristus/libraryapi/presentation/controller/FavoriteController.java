@@ -4,7 +4,7 @@ import com.unichristus.libraryapi.application.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.application.usecase.favorite.FavoriteBookUseCase;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(ServiceURIs.USERS_RESOURCE + "/me/favorites")
+@RequestMapping(ServiceURIs.FAVORITES_RESOURCE)
 public class FavoriteController {
 
     private final FavoriteService favoriteService;

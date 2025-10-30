@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.application.util;
+package com.unichristus.libraryapi.application.common;
 
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ public final class ServiceURIs {
     private static final String USERS = "/users";
     public static final String USERS_RESOURCE = BASE_API + USERS;
     public static final String READINGS_RESOURCE = BASE_API + "/readings";
-    public static final String FAVORITES_RESOURCE = BASE_API + "/favorites";
+    public static final String FAVORITES_RESOURCE = BASE_API + USERS + "/me/favorites";
 
     //Admin Paths
     private static final String ADMIN = API + "/admin";

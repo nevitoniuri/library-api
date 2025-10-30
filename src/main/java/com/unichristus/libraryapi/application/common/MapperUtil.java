@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.application.util;
+package com.unichristus.libraryapi.application.common;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;

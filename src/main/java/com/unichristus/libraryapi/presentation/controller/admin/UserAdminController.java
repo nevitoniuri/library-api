@@ -1,18 +1,21 @@
 
 package com.unichristus.libraryapi.presentation.controller.admin;
 
+import com.unichristus.libraryapi.application.common.MapperUtil;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
-import com.unichristus.libraryapi.application.util.MapperUtil;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,8 +35,12 @@ public class UserAdminController{
     @GetMapping
     @Operation(summary = "Listar usuários (admin)")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
-        return userService.findAll(pageable)
-                .map(user -> MapperUtil.parse(user, UserResponse.class));
+        PageRequestDomain pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
+        List<UserResponse> users = userService.findAll(pageRequest)
+                .stream()
+                .map(user -> MapperUtil.parse(user, UserResponse.class))
+                .toList();
+        return new PageImpl<>(users, pageable, users.size());
     }
 
     @DeleteMapping("/{id}")

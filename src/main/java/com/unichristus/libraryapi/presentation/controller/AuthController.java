@@ -4,7 +4,7 @@ import com.unichristus.libraryapi.application.dto.request.LoginRequest;
 import com.unichristus.libraryapi.application.dto.request.UserRegisterRequest;
 import com.unichristus.libraryapi.application.dto.response.AuthResponse;
 import com.unichristus.libraryapi.application.usecase.auth.AuthUseCase;
-import com.unichristus.libraryapi.application.util.ServiceURIs;
+import com.unichristus.libraryapi.application.common.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

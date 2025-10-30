@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.User;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface FavoriteRepository {
 
     void save(Favorite favorite);
 
-    List<Favorite> findAll(int page, int size);
+    List<Favorite> findAll(PageRequestDomain pageRequest);
 
     List<Favorite> findAllByUserId(UUID userId);
 

@@ -1,13 +1,20 @@
 package com.unichristus.libraryapi.domain.book;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
+public interface BookRepository {
+
+    Book save(Book book);
+
+    Optional<Book> findById(UUID id);
+
     boolean existsBookByIsbn(String isbn);
 
-    Page<Book> findBooksByHasPdfTrue(Pageable pageable);
+    List<Book> findBooksByHasPdfTrue(PageRequestDomain pageRequest);
+
+    void delete(Book book);
 }

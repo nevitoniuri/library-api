@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.exception.FavoriteAlreadyExistsException;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,8 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
 
-    public List<Favorite> findAll(int page, int size) {
-        return favoriteRepository.findAll(page, size);
+    public List<Favorite> findAll(PageRequestDomain pageRequest) {
+        return favoriteRepository.findAll(pageRequest);
     }
 
     public List<Favorite> findFavoritesByUser(UUID userId) {

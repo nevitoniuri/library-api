@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.domain.user;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +12,7 @@ public interface UserRepository {
 
     Optional<User> findById(UUID id);
 
-    List<User> findAll(int page, int size);
-
-    Page<User> findAll(Pageable pageable);
+    List<User> findAll(PageRequestDomain pageRequest);
 
     boolean existsByEmail(String email);
 

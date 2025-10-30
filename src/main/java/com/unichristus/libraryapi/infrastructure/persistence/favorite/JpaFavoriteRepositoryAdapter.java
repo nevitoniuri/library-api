@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.infrastructure.persistence.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
+import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.Favorite;
 import com.unichristus.libraryapi.domain.favorite.FavoriteRepository;
 import com.unichristus.libraryapi.domain.user.User;
@@ -23,8 +24,8 @@ public class JpaFavoriteRepositoryAdapter implements FavoriteRepository {
     }
 
     @Override
-    public List<Favorite> findAll(int page, int size) {
-        return jpaFavoriteRepository.findAll(PageRequest.of(page, size)).toList();
+    public List<Favorite> findAll(PageRequestDomain pageRequest) {
+        return jpaFavoriteRepository.findAll(PageRequest.of(pageRequest.page(), pageRequest.size())).toList();
     }
 
     @Override
