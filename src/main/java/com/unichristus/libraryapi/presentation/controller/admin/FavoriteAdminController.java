@@ -1,8 +1,8 @@
 package com.unichristus.libraryapi.presentation.controller.admin;
 
-import com.unichristus.libraryapi.application.common.MapperUtil;
 import com.unichristus.libraryapi.application.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
+import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ public class FavoriteAdminController {
         var pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
         List<FavoriteResponse> favorites = favoriteService.findAll(pageRequest)
                 .stream()
-                .map(favorite -> MapperUtil.parse(favorite, FavoriteResponse.class))
+                .map(FavoriteResponseMapper::toFavoriteResponse)
                 .toList();
         return new PageImpl<>(favorites, pageable, favorites.size());
     }
