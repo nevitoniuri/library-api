@@ -1,12 +1,12 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.application.usecase.favorite.FavoriteBookUseCase;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

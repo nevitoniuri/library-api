@@ -1,11 +1,11 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
 import com.unichristus.libraryapi.application.mapper.UserResponseMapper;
 import com.unichristus.libraryapi.domain.user.UserService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

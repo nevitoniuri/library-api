@@ -1,12 +1,12 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.response.BookPdfResponse;
 import com.unichristus.libraryapi.application.dto.response.BookResponse;
 import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.application.usecase.book.BookPdfUseCase;
 import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.common.PageRequestDomain;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

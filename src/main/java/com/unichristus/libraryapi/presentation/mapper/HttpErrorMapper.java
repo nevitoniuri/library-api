@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.application.exception;
+package com.unichristus.libraryapi.presentation.mapper;
 
 import com.unichristus.libraryapi.domain.exception.DomainError;
 import lombok.NoArgsConstructor;
