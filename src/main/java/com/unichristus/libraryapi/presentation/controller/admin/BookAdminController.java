@@ -1,10 +1,10 @@
 package com.unichristus.libraryapi.presentation.controller.admin;
 
-import com.unichristus.libraryapi.application.common.MapperUtil;
-import com.unichristus.libraryapi.application.common.ServiceURIs;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.request.BookCreateRequest;
 import com.unichristus.libraryapi.application.dto.request.BookUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.BookResponse;
+import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.application.usecase.book.BookPdfUseCase;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
@@ -32,7 +32,7 @@ public class BookAdminController {
     public BookResponse createBook(@RequestBody @Valid BookCreateRequest request) {
         Book createdBook = bookService.createBook(request.title(), request.isbn(),
                 request.numberOfPages(), request.publicationDate(), request.coverUrl());
-        return MapperUtil.parse(createdBook, BookResponse.class);
+        return BookResponseMapper.toBookResponse(createdBook);
     }
 
     //TODO: receber entidade completa e atualizar todos os campos?

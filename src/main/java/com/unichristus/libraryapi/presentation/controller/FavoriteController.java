@@ -1,6 +1,6 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.application.common.ServiceURIs;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;

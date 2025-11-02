@@ -1,8 +1,8 @@
 package com.unichristus.libraryapi.presentation.controller.admin;
 
-import com.unichristus.libraryapi.application.common.MapperUtil;
-import com.unichristus.libraryapi.application.common.ServiceURIs;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
+import com.unichristus.libraryapi.application.mapper.UserResponseMapper;
 import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ public class UserAdminController {
     @GetMapping("/{userId}")
     @Operation(summary = "Buscar usuário por ID (admin)")
     public UserResponse getUserById(@PathVariable UUID userId) {
-        return MapperUtil.parse(userService.findUserByIdOrThrow(userId), UserResponse.class);
+        return UserResponseMapper.toUserResponse(userService.findUserByIdOrThrow(userId));
     }
 
     @GetMapping
@@ -37,7 +37,7 @@ public class UserAdminController {
         PageRequestDomain pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
         List<UserResponse> users = userService.findAll(pageRequest)
                 .stream()
-                .map(user -> MapperUtil.parse(user, UserResponse.class))
+                .map(UserResponseMapper::toUserResponse)
                 .toList();
         return new PageImpl<>(users, pageable, users.size());
     }

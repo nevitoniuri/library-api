@@ -1,9 +1,9 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.application.common.MapperUtil;
-import com.unichristus.libraryapi.application.common.ServiceURIs;
+import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import com.unichristus.libraryapi.application.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
+import com.unichristus.libraryapi.application.mapper.UserResponseMapper;
 import com.unichristus.libraryapi.domain.user.UserService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ public class UserController {
 
     @GetMapping("/me")
     public UserResponse getMe(@LoggedUser UUID userId) {
-        return MapperUtil.parse(userService.findUserByIdOrThrow(userId), UserResponse.class);
+        return UserResponseMapper.toUserResponse(userService.findUserByIdOrThrow(userId));
     }
 
     @PutMapping("/me")

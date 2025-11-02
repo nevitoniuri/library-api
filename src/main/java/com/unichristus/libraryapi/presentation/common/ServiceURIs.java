@@ -1,4 +1,4 @@
-package com.unichristus.libraryapi.application.common;
+package com.unichristus.libraryapi.presentation.common;
 
 import lombok.NoArgsConstructor;
 
