@@ -5,6 +5,7 @@ import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.exception.FavoriteAlreadyExistsException;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
 
-    public List<Favorite> findAll(PageRequestDomain pageRequest) {
+    public Page<Favorite> findAll(PageRequestDomain pageRequest) {
         return favoriteRepository.findAll(pageRequest);
     }
 

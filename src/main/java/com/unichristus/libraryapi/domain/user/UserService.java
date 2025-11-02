@@ -4,9 +4,9 @@ import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.exception.EmailConflictException;
 import com.unichristus.libraryapi.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
 
-    public List<User> findAll(PageRequestDomain pageRequest) {
+    public Page<User> findAll(PageRequestDomain pageRequest) {
         return userRepository.findAll(pageRequest);
     }
 

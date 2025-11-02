@@ -2,8 +2,7 @@ package com.unichristus.libraryapi.presentation.controller;
 
 import com.unichristus.libraryapi.application.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
-import com.unichristus.libraryapi.application.mapper.UserResponseMapper;
-import com.unichristus.libraryapi.domain.user.UserService;
+import com.unichristus.libraryapi.application.usecase.user.UserUseCase;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,19 +19,19 @@ import java.util.UUID;
 @Tag(name = "Users", description = "Operações com usuário autenticado")
 public class UserController {
 
-    private final UserService userService;
+    private final UserUseCase userUseCase;
 
     @GetMapping("/me")
     public UserResponse getMe(@LoggedUser UUID userId) {
-        return UserResponseMapper.toUserResponse(userService.findUserByIdOrThrow(userId));
+        return userUseCase.getUserById(userId);
     }
 
     @PutMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMe(
             @LoggedUser UUID userId,
-            @RequestBody @Valid UserUpdateRequest dto
+            @RequestBody @Valid UserUpdateRequest requestDto
     ) {
-        userService.updateUser(userId, dto.name(), dto.email(), dto.password());
+        userUseCase.updateUser(userId, requestDto);
     }
 }

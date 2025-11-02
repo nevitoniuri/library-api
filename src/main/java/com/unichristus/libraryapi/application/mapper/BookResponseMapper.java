@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BookResponseMapper {
+public final class BookResponseMapper {
 
     public static BookResponse toBookResponse(Book book) {
         return BookResponse.builder()

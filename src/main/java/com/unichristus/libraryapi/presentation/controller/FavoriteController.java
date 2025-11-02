@@ -2,9 +2,7 @@ package com.unichristus.libraryapi.presentation.controller;
 
 import com.unichristus.libraryapi.application.dto.request.FavoriteBookRequest;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
-import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.application.usecase.favorite.FavoriteBookUseCase;
-import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
 import com.unichristus.libraryapi.presentation.common.ServiceURIs;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,14 +19,12 @@ import java.util.UUID;
 @RequestMapping(ServiceURIs.FAVORITES_RESOURCE)
 public class FavoriteController {
 
-    private final FavoriteService favoriteService;
     private final FavoriteBookUseCase favoriteBookUseCase;
 
     @GetMapping
     @Operation(summary = "Listar favoritos do usuário logado")
     public List<FavoriteResponse> getUserFavorites(@LoggedUser UUID userId) {
-        return favoriteService.findFavoritesByUser(userId).stream()
-                .map(FavoriteResponseMapper::toFavoriteResponse).toList();
+        return favoriteBookUseCase.getUserFavorites(userId);
     }
 
     @PostMapping

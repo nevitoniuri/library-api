@@ -19,7 +19,7 @@ public class BookPdfUseCase {
     private final BookService bookService;
     private final MinioFileStorageService minioFileStorageService;
 
-    public BookPdfResponse getBookById(UUID bookId) {
+    public BookPdfResponse getBookWithPdf(UUID bookId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
         return BookResponseMapper.toBookPdfResponse(book, getBookPdfUrl(book));
     }

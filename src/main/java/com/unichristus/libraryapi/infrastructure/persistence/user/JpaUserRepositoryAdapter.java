@@ -4,10 +4,10 @@ import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.User;
 import com.unichristus.libraryapi.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,8 +33,8 @@ public class JpaUserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public List<User> findAll(PageRequestDomain pageRequest) {
-        return jpaUserRepository.findAll(PageRequest.of(pageRequest.page(), pageRequest.size())).toList();
+    public Page<User> findAll(PageRequestDomain pageRequest) {
+        return jpaUserRepository.findAll(PageRequest.of(pageRequest.page(), pageRequest.size()));
     }
 
     @Override

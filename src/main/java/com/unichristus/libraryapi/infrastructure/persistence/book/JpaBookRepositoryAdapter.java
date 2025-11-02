@@ -4,10 +4,10 @@ import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookRepository;
 import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,8 +33,8 @@ public class JpaBookRepositoryAdapter implements BookRepository {
     }
 
     @Override
-    public List<Book> findBooksByHasPdfTrue(PageRequestDomain pageRequest) {
-        return jpaBookRepository.findBooksByHasPdfTrue(PageRequest.of(pageRequest.page(), pageRequest.size())).toList();
+    public Page<Book> findBooksByHasPdfTrue(PageRequestDomain pageRequest) {
+        return jpaBookRepository.findBooksByHasPdfTrue(PageRequest.of(pageRequest.page(), pageRequest.size()));
     }
 
     @Override
