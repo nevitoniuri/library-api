@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookLowResponse {
+public class BookHomeResponse {
     private UUID id;
     private String title;
     private boolean favorite;

@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ReadingResponse {
     private UUID id;
-    private BookLowResponse book;
+    private BookResponse book;
     private ReadingStatus status;
     private Integer currentPage;
     private Integer progress;

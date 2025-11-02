@@ -1,5 +1,7 @@
 package com.unichristus.libraryapi.application.usecase.book;
 
+import com.unichristus.libraryapi.application.dto.response.BookPdfResponse;
+import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.book.exception.BookPdfNotFoundException;
@@ -16,6 +18,11 @@ public class BookPdfUseCase {
 
     private final BookService bookService;
     private final MinioFileStorageService minioFileStorageService;
+
+    public BookPdfResponse getBookById(UUID bookId) {
+        Book book = bookService.findBookByIdOrThrow(bookId);
+        return BookResponseMapper.toBookPdfResponse(book, getBookPdfUrl(book));
+    }
 
     public String getBookPdfUrl(Book book) {
         if (!book.isHasPdf()) {

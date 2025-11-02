@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,10 +32,19 @@ public class ReadingService {
         return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public Reading createReading(UUID bookId, UUID userId) throws PdfNotAvailableException {
+    public Optional<Reading> findReadindInProgress(UUID userId, Book book) {
+        return readingRepository.findReadingWithStatus(userId, book, ReadingStatus.IN_PROGRESS);
+    }
+
+    public Reading findReadingInProgressOrCreateReading(UUID userId, UUID bookId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
+        return findReadindInProgress(userId, book)
+                .orElseGet(() -> createReading(userId, book));
+    }
+
+    private Reading createReading(UUID userId, Book book) throws PdfNotAvailableException {
         if (!book.isHasPdf()) {
-            throw new PdfNotAvailableException(bookId);
+            throw new PdfNotAvailableException(book.getId());
         }
         LocalDateTime now = LocalDateTime.now();
         User user = User.builder().id(userId).build();
@@ -52,13 +62,9 @@ public class ReadingService {
         return readingRepository.save(reading);
     }
 
-    public void updateReadingProgress(UUID readingId, UUID userId, Integer newCurrentPage) {
-        Reading reading = findByIdOrThrow(readingId);
-        if (!userId.equals(reading.getUser().getId())) {
-            throw new ReadingBelongsToAnotherUserException();
-        }
+    public void updateReadingProgress(Reading reading, Integer newCurrentPage) {
         if (reading.getStatus() == ReadingStatus.FINISHED) {
-            throw new ReadingAlreadyFinishedException(readingId);
+            throw new ReadingAlreadyFinishedException(reading.getId());
         }
         if (newCurrentPage < reading.getCurrentPage() || newCurrentPage > reading.getBook().getNumberOfPages()) {
             throw new InvalidPageProgressException();

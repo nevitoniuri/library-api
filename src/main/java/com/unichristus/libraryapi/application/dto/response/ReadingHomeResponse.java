@@ -13,14 +13,13 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StartReadingResponse {
+public class ReadingHomeResponse {
     private UUID id;
-    private BookLowResponse book;
+    private BookHomeResponse book;
     private ReadingStatus status;
     private Integer currentPage;
     private Integer progress;
     private LocalDateTime startedAt;
     private LocalDateTime lastReadedAt;
     private LocalDateTime finishedAt;
-    private String bookPdfUrl;
 }

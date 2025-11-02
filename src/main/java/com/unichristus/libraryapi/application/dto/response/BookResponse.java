@@ -1,11 +1,12 @@
 package com.unichristus.libraryapi.application.dto.response;
 
-import lombok.*;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+@SuperBuilder
 @Data
 public class BookResponse {
     private UUID id;
@@ -13,6 +14,4 @@ public class BookResponse {
     private String isbn;
     private Integer numberOfPages;
     private LocalDate publicationDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

@@ -2,7 +2,7 @@ package com.unichristus.libraryapi.application.usecase.home;
 
 import com.unichristus.libraryapi.application.mapper.ReadingResponseMapper;
 import com.unichristus.libraryapi.application.dto.response.HomeResponse;
-import com.unichristus.libraryapi.application.dto.response.ReadingResponse;
+import com.unichristus.libraryapi.application.dto.response.ReadingHomeResponse;
 import com.unichristus.libraryapi.application.dto.response.UserSummaryResponse;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.domain.reading.ReadingService;
@@ -34,12 +34,12 @@ public class HomeResumeUseCase {
         int totalPagesRead = 0;
         int totalFinished = 0;
 
-        List<ReadingResponse> inProgress = new ArrayList<>();
+        List<ReadingHomeResponse> inProgress = new ArrayList<>();
 
         for (Reading reading : readings) {
             if (reading.getStatus() == ReadingStatus.IN_PROGRESS) {
                 boolean isFavorite = favoriteBooks.contains(reading.getBook());
-                inProgress.add(ReadingResponseMapper.toReadingResponse(reading, isFavorite));
+                inProgress.add(ReadingResponseMapper.toReadingHomeResponse(reading, isFavorite));
             } else if (reading.getStatus() == ReadingStatus.FINISHED) {
                 totalFinished++;
                 totalPagesRead += reading.getCurrentPage();

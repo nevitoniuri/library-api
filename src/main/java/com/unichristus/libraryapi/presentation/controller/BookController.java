@@ -1,8 +1,10 @@
 package com.unichristus.libraryapi.presentation.controller;
 
-import com.unichristus.libraryapi.application.common.MapperUtil;
 import com.unichristus.libraryapi.application.common.ServiceURIs;
+import com.unichristus.libraryapi.application.dto.response.BookPdfResponse;
 import com.unichristus.libraryapi.application.dto.response.BookResponse;
+import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
+import com.unichristus.libraryapi.application.usecase.book.BookPdfUseCase;
 import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,12 @@ import java.util.UUID;
 public class BookController {
 
     private final BookService bookService;
+    private final BookPdfUseCase bookPdfUseCase;
+
+    @GetMapping("{bookId}")
+    public BookPdfResponse getBookById(@PathVariable UUID bookId) {
+        return bookPdfUseCase.getBookById(bookId);
+    }
 
     @GetMapping
     //TODO: Implementar filtros de busca (nome, autor, categoria, etc)
@@ -30,13 +38,9 @@ public class BookController {
         var pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
         List<BookResponse> books = bookService.findAll(pageRequest)
                 .stream()
-                .map(book -> MapperUtil.parse(book, BookResponse.class))
+                .map(BookResponseMapper::toBookResponse)
                 .toList();
         return new PageImpl<>(books, pageable, books.size());
     }
 
-    @GetMapping("{id}")
-    public BookResponse getBookById(@PathVariable UUID id) {
-        return MapperUtil.parse(bookService.findBookByIdOrThrow(id), BookResponse.class);
-    }
 }
