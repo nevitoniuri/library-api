@@ -20,9 +20,9 @@ public class BookService {
         return bookRepository.findBooksByHasPdfTrue(pageRequest);
     }
 
-    public Book findBookByIdOrThrow(UUID id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));
+    public Book findBookByIdOrThrow(UUID bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotFoundException(bookId));
     }
 
     public Book save(Book book) {
@@ -41,8 +41,8 @@ public class BookService {
         return save(book);
     }
 
-    public void updateBook(UUID id, String title, String isbn, Integer numberOfPages, LocalDate publicationDate) {
-        Book book = findBookByIdOrThrow(id);
+    public void updateBook(UUID bookId, String title, String isbn, Integer numberOfPages, LocalDate publicationDate) {
+        Book book = findBookByIdOrThrow(bookId);
         boolean changed = false;
         if (title != null && !title.equals(book.getTitle())) {
             book.setTitle(title);
@@ -72,7 +72,7 @@ public class BookService {
         }
     }
 
-    public void deleteBookById(UUID id) {
-        bookRepository.delete(findBookByIdOrThrow(id));
+    public void deleteBookById(UUID bookId) {
+        bookRepository.delete(findBookByIdOrThrow(bookId));
     }
 }

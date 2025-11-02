@@ -36,19 +36,19 @@ public class BookAdminController {
     }
 
     //TODO: receber entidade completa e atualizar todos os campos?
-    @PatchMapping("{id}")
-    public void updateBook(@PathVariable UUID id, @RequestBody BookUpdateRequest request) {
-        bookService.updateBook(id, request.title(), request.isbn(), request.numberOfPages(), request.publicationDate());
+    @PatchMapping("{bookId}")
+    public void updateBook(@PathVariable UUID bookId, @RequestBody BookUpdateRequest request) {
+        bookService.updateBook(bookId, request.title(), request.isbn(), request.numberOfPages(), request.publicationDate());
     }
 
-    @PostMapping(path = "/{id}/upload", consumes = {"multipart/form-data"})
-    public void uploadBook(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
-        bookPdfUseCase.uploadBookPdf(id, file);
+    @PostMapping(path = "/{bookId}/upload", consumes = {"multipart/form-data"})
+    public void uploadBook(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
+        bookPdfUseCase.uploadBookPdf(bookId, file);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable UUID id) {
-        bookService.deleteBookById(id);
+    public void deleteBook(@PathVariable UUID bookId) {
+        bookService.deleteBookById(bookId);
     }
 }

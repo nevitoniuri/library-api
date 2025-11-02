@@ -26,14 +26,14 @@ public class UserAdminController{
 
     private final UserService userService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{userId}")
     @Operation(summary = "Buscar usuário por ID (admin)")
-    public UserResponse getUserById(@PathVariable UUID id) {
-        return MapperUtil.parse(userService.findUserByIdOrThrow(id), UserResponse.class);
+    public UserResponse getUserById(@PathVariable UUID userId) {
+        return MapperUtil.parse(userService.findUserByIdOrThrow(userId), UserResponse.class);
     }
 
     @GetMapping
-    @Operation(summary = "Listar usuários (admin)")
+    @Operation(summary = "Listar usuários (admin) paginado")
     public Page<UserResponse> getAllUsers(Pageable pageable) {
         PageRequestDomain pageRequest = new PageRequestDomain(pageable.getPageNumber(), pageable.getPageSize());
         List<UserResponse> users = userService.findAll(pageRequest)
@@ -43,11 +43,11 @@ public class UserAdminController{
         return new PageImpl<>(users, pageable, users.size());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Remover usuário por ID (admin)")
-    public void deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable UUID userId) {
+        userService.deleteUserById(userId);
     }
 }
 

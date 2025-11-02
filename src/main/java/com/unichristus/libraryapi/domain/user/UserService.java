@@ -21,9 +21,9 @@ public class UserService {
         return userRepository.findAll(pageRequest);
     }
 
-    public User findUserByIdOrThrow(UUID id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id.toString()));
+    public User findUserByIdOrThrow(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId.toString()));
     }
 
     public Optional<User> findUserByEmail(String email) {
@@ -63,8 +63,8 @@ public class UserService {
         }
     }
 
-    public void deleteUser(UUID id) {
-        userRepository.delete(findUserByIdOrThrow(id));
+    public void deleteUserById(UUID userId) {
+        userRepository.delete(findUserByIdOrThrow(userId));
     }
 
     private void validateEmailUnique(String email) {
