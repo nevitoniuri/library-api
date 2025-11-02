@@ -26,11 +26,6 @@ public class BookAdminController {
     private final BookService bookService;
     private final BookPdfUseCase bookPdfUseCase;
 
-    @PostMapping(path = "/{bookId}/upload", consumes = {"multipart/form-data"})
-    public void uploadBook(@PathVariable UUID bookId, @RequestParam("file") MultipartFile file) {
-        bookPdfUseCase.uploadBookPdf(bookId, file);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     //TODO: Adicionar CreatedResource para retornar o Location do recurso criado
@@ -44,6 +39,11 @@ public class BookAdminController {
     @PatchMapping("{id}")
     public void updateBook(@PathVariable UUID id, @RequestBody BookUpdateRequest request) {
         bookService.updateBook(id, request.title(), request.isbn(), request.numberOfPages(), request.publicationDate());
+    }
+
+    @PostMapping(path = "/{id}/upload", consumes = {"multipart/form-data"})
+    public void uploadBook(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        bookPdfUseCase.uploadBookPdf(id, file);
     }
 
     @DeleteMapping("{id}")
