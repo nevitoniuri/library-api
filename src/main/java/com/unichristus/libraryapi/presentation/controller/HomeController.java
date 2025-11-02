@@ -20,6 +20,6 @@ public class HomeController {
 
     @GetMapping("resume")
     public HomeResponse resume(@LoggedUser UUID userId) {
-         return homeResumeUseCase.resume(userId);
+        return homeResumeUseCase.resume(userId);
     }
 }

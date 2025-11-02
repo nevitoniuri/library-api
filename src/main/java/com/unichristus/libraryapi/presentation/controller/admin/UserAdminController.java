@@ -1,4 +1,3 @@
-
 package com.unichristus.libraryapi.presentation.controller.admin;
 
 import com.unichristus.libraryapi.application.common.MapperUtil;
@@ -22,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping(ServiceURIs.ADMIN_USERS)
 @Tag(name = "Users Admin", description = "Operações administrativas de usuários")
-public class UserAdminController{
+public class UserAdminController {
 
     private final UserService userService;
 

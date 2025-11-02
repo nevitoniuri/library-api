@@ -8,4 +8,5 @@ public record FavoriteResponse(
         String bookTitle,
         String bookIsbn,
         LocalDateTime createdAt
-) {}
+) {
+}

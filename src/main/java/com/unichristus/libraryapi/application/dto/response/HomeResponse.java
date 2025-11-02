@@ -4,6 +4,6 @@ import java.util.List;
 
 public record HomeResponse(
         List<ReadingHomeResponse> readings,
-        UserSummaryResponse  userSummary
+        UserSummaryResponse userSummary
 ) {
 }

@@ -26,4 +26,5 @@ public record UserRegisterRequest(
         )
         @Schema(description = "Senha do usuário", example = "strongPassword123")
         String password
-) {}
+) {
+}
