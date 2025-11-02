@@ -2,13 +2,9 @@ package com.unichristus.libraryapi.domain.user;
 
 import com.unichristus.libraryapi.infrastructure.security.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
