@@ -30,6 +30,7 @@ public class User {
     @Column(nullable = false, length = 60)
     private String password;
 
+    @Builder.Default
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
