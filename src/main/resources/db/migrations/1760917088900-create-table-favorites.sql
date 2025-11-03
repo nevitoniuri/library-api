@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset author:1760917088900
+--changeset tiala:1760917088900
 -- Criação da tabela de favoritos
 CREATE TABLE IF NOT EXISTS favorites
 (
