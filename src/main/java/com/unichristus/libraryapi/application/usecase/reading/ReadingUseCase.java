@@ -1,15 +1,15 @@
 package com.unichristus.libraryapi.application.usecase.reading;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.response.ReadingResponse;
 import com.unichristus.libraryapi.application.mapper.ReadingResponseMapper;
 import com.unichristus.libraryapi.domain.reading.Reading;
 import com.unichristus.libraryapi.domain.reading.ReadingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class ReadingUseCase {
 

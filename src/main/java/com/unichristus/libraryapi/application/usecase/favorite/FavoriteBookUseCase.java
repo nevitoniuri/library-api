@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.application.usecase.favorite;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
@@ -10,12 +11,11 @@ import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class FavoriteBookUseCase {
 
