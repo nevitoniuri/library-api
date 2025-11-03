@@ -29,7 +29,15 @@ public enum DomainError {
 
     // FAVORITE ERRORS
     FAVORITE_ALREADY_EXISTS("FAVORITE_ALREADY_EXISTS", "Já existe um favorito cadastrado para o usuário: %s e o livro: %s"),
-    FAVORITE_NOT_FOUND("FAVORITE_NOT_FOUND", "Favorito não encontrado: %s");
+    FAVORITE_NOT_FOUND("FAVORITE_NOT_FOUND", "Favorito não encontrado: %s"),
+
+    //REVIEWS ERRORS
+    REVIEW_NOT_FOUND("REVIEW_NOT_FOUND", "Avaliação não encontrada: %s"),
+    REVIEW_NOT_ALLOWED("REVIEW_NOT_ALLOWED", "Não é possível avaliar o livro."),
+    REVIEW_BELONGS_TO_ANOTHER_USER("REVIEW_BELONGS_TO_ANOTHER_USER", "A avaliação está associada a outro usuário."),
+    REVIEW_ALREADY_EXISTS("REVIEW_ALREADY_EXISTS", "O usuário já avaliou o livro."),
+
+    ;
 
     private final String code;
     private final String description;

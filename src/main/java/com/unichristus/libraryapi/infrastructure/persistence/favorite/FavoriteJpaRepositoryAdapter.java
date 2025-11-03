@@ -13,32 +13,32 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaFavoriteRepositoryAdapter implements FavoriteRepository {
+public class FavoriteJpaRepositoryAdapter implements FavoriteRepository {
 
-    private final JpaFavoriteRepository jpaFavoriteRepository;
+    private final FavoriteJpaRepository favoriteJpaRepository;
 
     @Override
     public void save(Favorite favorite) {
-        jpaFavoriteRepository.save(favorite);
+        favoriteJpaRepository.save(favorite);
     }
 
     @Override
     public Page<Favorite> findAll(Pageable pageable) {
-        return jpaFavoriteRepository.findAll(pageable);
+        return favoriteJpaRepository.findAll(pageable);
     }
 
     @Override
     public List<Favorite> findAllByUserId(UUID userId) {
-        return jpaFavoriteRepository.findAllByUserId(userId);
+        return favoriteJpaRepository.findAllByUserId(userId);
     }
 
     @Override
     public boolean existsByUserAndBook(UUID userId, Book book) {
-        return jpaFavoriteRepository.existsByUserIdAndBook(userId, book);
+        return favoriteJpaRepository.existsByUserIdAndBook(userId, book);
     }
 
     @Override
     public void deleteByUserIdAndBook(UUID userId, Book book) {
-        jpaFavoriteRepository.deleteByUserIdAndBook(userId, book);
+        favoriteJpaRepository.deleteByUserIdAndBook(userId, book);
     }
 }

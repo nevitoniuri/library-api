@@ -6,19 +6,20 @@ import lombok.NoArgsConstructor;
 public final class ServiceURIs {
 
     //API Paths
-    public static final String V1 = "/v1";
-    public static final String API = "/api";
-    public static final String BASE_API = API + V1;
+    private static final String V1 = "/v1";
+    private static final String API = "/api";
+    private static final String BASE_API = API + V1;
+    private static final String USERS = "/users";
+    private static final String BOOKS = "/books";
 
     //Resource Paths
     public static final String HOME_RESOURCE = BASE_API + "/home";
     public static final String AUTH_RESOURCE = BASE_API + "/auth";
-    private static final String BOOKS = "/books";
     public static final String BOOKS_RESOURCE = BASE_API + BOOKS;
-    private static final String USERS = "/users";
     public static final String USERS_RESOURCE = BASE_API + USERS;
     public static final String READINGS_RESOURCE = BASE_API + "/readings";
     public static final String FAVORITES_RESOURCE = BASE_API + USERS + "/me/favorites";
+    public static final String REVIEWS_RESOURCE = BASE_API + "/reviews";
 
     //Admin Paths
     private static final String ADMIN = API + "/admin";

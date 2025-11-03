@@ -12,32 +12,32 @@ import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaBookRepositoryAdapter implements BookRepository {
+public class BookJpaRepositoryAdapter implements BookRepository {
 
-    private final JpaBookRepository jpaBookRepository;
+    private final BookJpaRepository bookJpaRepository;
 
     @Override
     public Book save(Book book) {
-        return jpaBookRepository.save(book);
+        return bookJpaRepository.save(book);
     }
 
     @Override
     public Optional<Book> findById(UUID id) {
-        return jpaBookRepository.findById(id);
+        return bookJpaRepository.findById(id);
     }
 
     @Override
     public boolean existsBookByIsbn(String isbn) {
-        return jpaBookRepository.existsBookByIsbn(isbn);
+        return bookJpaRepository.existsBookByIsbn(isbn);
     }
 
     @Override
     public Page<Book> findBooksByHasPdfTrue(Pageable pageable) {
-        return jpaBookRepository.findBooksByHasPdfTrue(pageable);
+        return bookJpaRepository.findBooksByHasPdfTrue(pageable);
     }
 
     @Override
     public void delete(Book book) {
-        jpaBookRepository.delete(book);
+        bookJpaRepository.delete(book);
     }
 }

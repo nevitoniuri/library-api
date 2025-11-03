@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface JpaFavoriteRepository extends JpaRepository<Favorite, UUID> {
+public interface FavoriteJpaRepository extends JpaRepository<Favorite, UUID> {
     List<Favorite> findAllByUserId(UUID userId);
 
     boolean existsByUserIdAndBook(UUID userId, Book book);

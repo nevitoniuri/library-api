@@ -28,8 +28,12 @@ public class ReadingService {
         return readingRepository.findReadingsByUserOrderByLastReadedAtDesc(userId);
     }
 
-    public boolean hasInProgressReading(User user, Book book) {
-        return readingRepository.hasReadingWithStatus(user, book, ReadingStatus.IN_PROGRESS);
+    public Optional<Reading> findInProgressReadingByUserAndBook(UUID userId, Book book) {
+        return readingRepository.findReadingWithStatus(userId, book, ReadingStatus.IN_PROGRESS);
+    }
+
+    public boolean hasInProgressReading(UUID userId, Book book) {
+        return readingRepository.existsByUserIdAndBookAndStatus(userId, book, ReadingStatus.IN_PROGRESS);
     }
 
     public Optional<Reading> findReadindInProgress(UUID userId, Book book) {
@@ -47,13 +51,12 @@ public class ReadingService {
             throw new PdfNotAvailableException(book.getId());
         }
         LocalDateTime now = LocalDateTime.now();
-        User user = User.builder().id(userId).build();
-        if (hasInProgressReading(user, book)) {
+        if (hasInProgressReading(userId, book)) {
             throw new ReadingInProgressException(userId, book.getId());
         }
         Reading reading = Reading.builder()
                 .book(book)
-                .user(user)
+                .user(User.builder().id(userId).build())
                 .status(ReadingStatus.IN_PROGRESS)
                 .currentPage(1)
                 .startedAt(now)

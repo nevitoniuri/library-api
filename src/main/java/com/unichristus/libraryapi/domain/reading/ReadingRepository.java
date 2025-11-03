@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.domain.reading;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,18 +18,7 @@ public interface ReadingRepository extends JpaRepository<Reading, UUID> {
             """)
     List<Reading> findReadingsByUserOrderByLastReadedAtDesc(UUID userid);
 
-    @Query("""
-            SELECT COUNT(r) > 0
-            FROM Reading r
-            WHERE r.user = :user
-              AND r.book = :book
-              AND r.status = :status
-            """)
-    boolean hasReadingWithStatus(
-            @Param("user") User user,
-            @Param("book") Book book,
-            @Param("status") ReadingStatus status
-    );
+    boolean existsByUserIdAndBookAndStatus(UUID userId, Book book, ReadingStatus status);
 
     @Query("""
             SELECT r

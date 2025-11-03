@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface JpaBookRepository extends JpaRepository<Book, UUID> {
+public interface BookJpaRepository extends JpaRepository<Book, UUID> {
 
     boolean existsBookByIsbn(String isbn);
 
