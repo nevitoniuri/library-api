@@ -1,19 +1,18 @@
 package com.unichristus.libraryapi.application.usecase.user;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.request.UserUpdateRequest;
 import com.unichristus.libraryapi.application.dto.response.UserResponse;
 import com.unichristus.libraryapi.application.mapper.UserResponseMapper;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.user.User;
 import com.unichristus.libraryapi.domain.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class UserUseCase {
 
@@ -29,12 +28,7 @@ public class UserUseCase {
     }
 
     public Page<UserResponse> getAllUsers(Pageable pageable) {
-        var pageRequest = new PageRequestDomain(
-                pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
-        return userService.findAll(pageRequest)
-                .map(UserResponseMapper::toUserResponse);
+        return userService.findAll(pageable).map(UserResponseMapper::toUserResponse);
     }
 
     public void deleteUser(UUID userId) {

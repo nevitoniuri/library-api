@@ -1,13 +1,12 @@
 package com.unichristus.libraryapi.infrastructure.persistence.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.Favorite;
 import com.unichristus.libraryapi.domain.favorite.FavoriteRepository;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +24,8 @@ public class JpaFavoriteRepositoryAdapter implements FavoriteRepository {
     }
 
     @Override
-    public Page<Favorite> findAll(PageRequestDomain pageRequest) {
-        return jpaFavoriteRepository.findAll(PageRequest.of(pageRequest.page(), pageRequest.size()));
+    public Page<Favorite> findAll(Pageable pageable) {
+        return jpaFavoriteRepository.findAll(pageable);
     }
 
     @Override

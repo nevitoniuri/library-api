@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.application.usecase.home;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.response.HomeResponse;
 import com.unichristus.libraryapi.application.dto.response.ReadingHomeResponse;
 import com.unichristus.libraryapi.application.dto.response.UserSummaryResponse;
@@ -11,13 +12,12 @@ import com.unichristus.libraryapi.domain.reading.Reading;
 import com.unichristus.libraryapi.domain.reading.ReadingService;
 import com.unichristus.libraryapi.domain.reading.ReadingStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class HomeResumeUseCase {
 

@@ -1,21 +1,20 @@
 package com.unichristus.libraryapi.application.usecase.favorite;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class FavoriteBookUseCase {
 
@@ -29,11 +28,7 @@ public class FavoriteBookUseCase {
     }
 
     public Page<FavoriteResponse> getAll(Pageable pageable) {
-        var pageRequest = new PageRequestDomain(
-                pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
-        return favoriteService.findAll(pageRequest)
+        return favoriteService.findAll(pageable)
                 .map(FavoriteResponseMapper::toFavoriteResponse);
     }
 

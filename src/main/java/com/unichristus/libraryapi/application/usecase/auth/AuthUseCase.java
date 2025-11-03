@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.application.usecase.auth;
 
+import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.request.LoginRequest;
 import com.unichristus.libraryapi.application.dto.request.UserRegisterRequest;
 import com.unichristus.libraryapi.application.dto.response.AuthResponse;
@@ -14,9 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-@Service
+@UseCase
 @RequiredArgsConstructor
 public class AuthUseCase {
 
