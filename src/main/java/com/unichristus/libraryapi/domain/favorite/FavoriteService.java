@@ -25,19 +25,18 @@ public class FavoriteService {
         return favoriteRepository.findAllByUserId(userId);
     }
 
-    public boolean isFavorite(Book book, User user) {
-        return favoriteRepository.existsByUserAndBook(user, book);
+    public boolean isFavorite(Book book, UUID userId) {
+        return favoriteRepository.existsByUserAndBook(userId, book);
     }
 
     public void createFavorite(Book book, User user) {
-        if (isFavorite(book, user)) {
+        if (isFavorite(book, user.getId())) {
             throw new FavoriteAlreadyExistsException(user.getId(), book.getId());
         }
         Favorite favorite = Favorite.builder()
                 .user(user)
                 .book(book)
                 .build();
-
         favoriteRepository.save(favorite);
     }
 

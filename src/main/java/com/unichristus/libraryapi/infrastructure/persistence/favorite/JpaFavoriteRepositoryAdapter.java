@@ -3,7 +3,6 @@ package com.unichristus.libraryapi.infrastructure.persistence.favorite;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.favorite.Favorite;
 import com.unichristus.libraryapi.domain.favorite.FavoriteRepository;
-import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +33,12 @@ public class JpaFavoriteRepositoryAdapter implements FavoriteRepository {
     }
 
     @Override
-    public boolean existsByUserAndBook(User user, Book book) {
-        return false;
+    public boolean existsByUserAndBook(UUID userId, Book book) {
+        return jpaFavoriteRepository.existsByUserIdAndBook(userId, book);
     }
 
     @Override
     public void deleteByUserIdAndBook(UUID userId, Book book) {
-
+        jpaFavoriteRepository.deleteByUserIdAndBook(userId, book);
     }
 }

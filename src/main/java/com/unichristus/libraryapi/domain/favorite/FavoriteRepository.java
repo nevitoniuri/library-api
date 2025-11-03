@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +15,7 @@ public interface FavoriteRepository {
 
     List<Favorite> findAllByUserId(UUID userId);
 
-    boolean existsByUserAndBook(User user, Book book);
+    boolean existsByUserAndBook(UUID userId, Book book);
 
     void deleteByUserIdAndBook(UUID userId, Book book);
 }

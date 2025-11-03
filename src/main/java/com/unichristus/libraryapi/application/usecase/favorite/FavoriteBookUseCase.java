@@ -45,7 +45,6 @@ public class FavoriteBookUseCase {
 
     public boolean isFavorite(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
-        User user = User.builder().id(userId).build();
-        return favoriteService.isFavorite(book, user);
+        return favoriteService.isFavorite(book, userId);
     }
 }
