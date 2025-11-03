@@ -1,11 +1,11 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import com.unichristus.libraryapi.domain.favorite.exception.FavoriteAlreadyExistsException;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
 
-    public Page<Favorite> findAll(PageRequestDomain pageRequest) {
-        return favoriteRepository.findAll(pageRequest);
+    public Page<Favorite> findAll(Pageable pageable) {
+        return favoriteRepository.findAll(pageable);
     }
 
     public List<Favorite> findFavoritesByUser(UUID userId) {

@@ -2,9 +2,9 @@ package com.unichristus.libraryapi.domain.book;
 
 import com.unichristus.libraryapi.domain.book.exception.BookIsbnConflict;
 import com.unichristus.libraryapi.domain.book.exception.BookNotFoundException;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,8 +16,8 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Page<Book> findAll(PageRequestDomain pageRequest) {
-        return bookRepository.findBooksByHasPdfTrue(pageRequest);
+    public Page<Book> findAll(Pageable pageable) {
+        return bookRepository.findBooksByHasPdfTrue(pageable);
     }
 
     public Book findBookByIdOrThrow(UUID bookId) {

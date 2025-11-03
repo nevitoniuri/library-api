@@ -7,7 +7,6 @@ import com.unichristus.libraryapi.application.dto.response.BookResponse;
 import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
-import com.unichristus.libraryapi.domain.common.PageRequestDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +20,7 @@ public class BookUseCase {
     private final BookService bookService;
 
     public Page<BookResponse> getAllBooks(Pageable pageable) {
-        var pageRequest = new PageRequestDomain(
-                pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
-        Page<Book> books = bookService.findAll(pageRequest);
+        Page<Book> books = bookService.findAll(pageable);
         return books.map(BookResponseMapper::toBookResponse);
     }
 
