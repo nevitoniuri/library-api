@@ -37,6 +37,10 @@ public enum DomainError {
     REVIEW_BELONGS_TO_ANOTHER_USER("REVIEW_BELONGS_TO_ANOTHER_USER", "A avaliação está associada a outro usuário."),
     REVIEW_ALREADY_EXISTS("REVIEW_ALREADY_EXISTS", "O usuário já avaliou o livro."),
 
+    //CATEGORY ERRORS
+    CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "Categoria não encontrada"),
+    CATEGORY_ALREADY_EXISTS("CATEGORY_ALREADY_EXISTS", "Já existe uma categoria cadastrada com o nome: %s"),
+
     ;
 
     private final String code;

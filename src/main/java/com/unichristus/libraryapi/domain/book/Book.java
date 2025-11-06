@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.domain.book;
 
+import com.unichristus.libraryapi.domain.category.Category;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -40,6 +43,17 @@ public class Book {
 
     @Column(name = "has_pdf", nullable = false)
     private boolean hasPdf;
+
+    @Column(name = "available", nullable = false)
+    private boolean available;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_categories",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)

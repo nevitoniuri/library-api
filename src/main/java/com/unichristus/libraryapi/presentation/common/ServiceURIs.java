@@ -20,6 +20,7 @@ public final class ServiceURIs {
     public static final String READINGS_RESOURCE = BASE_API + "/readings";
     public static final String FAVORITES_RESOURCE = BASE_API + USERS + "/me/favorites";
     public static final String REVIEWS_RESOURCE = BASE_API + "/reviews";
+    public static final String CATEGORIES_RESOURCE = BASE_API + "/categories";
 
     //Admin Paths
     private static final String ADMIN = API + "/admin";

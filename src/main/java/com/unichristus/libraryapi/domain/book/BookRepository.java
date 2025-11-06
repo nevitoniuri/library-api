@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.domain.book;
 
+import com.unichristus.libraryapi.domain.category.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,9 @@ public interface BookRepository {
 
     boolean existsBookByIsbn(String isbn);
 
-    Page<Book> findBooksByHasPdfTrue(Pageable pageable);
+    Page<Book> findBooksByAvailableTrueAndHasPdfTrue(Pageable pageable);
 
     void delete(Book book);
+
+    Page<Book> findBooksByCategory(Category category, Pageable pageable);
 }

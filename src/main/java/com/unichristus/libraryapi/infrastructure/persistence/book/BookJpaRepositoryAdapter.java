@@ -2,6 +2,7 @@ package com.unichristus.libraryapi.infrastructure.persistence.book;
 
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookRepository;
+import com.unichristus.libraryapi.domain.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,12 +33,17 @@ public class BookJpaRepositoryAdapter implements BookRepository {
     }
 
     @Override
-    public Page<Book> findBooksByHasPdfTrue(Pageable pageable) {
+    public Page<Book> findBooksByAvailableTrueAndHasPdfTrue(Pageable pageable) {
         return bookJpaRepository.findBooksByHasPdfTrue(pageable);
     }
 
     @Override
     public void delete(Book book) {
         bookJpaRepository.delete(book);
+    }
+
+    @Override
+    public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
+        return bookJpaRepository.findByCategoryId(category.getId(), pageable);
     }
 }

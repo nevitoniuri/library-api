@@ -2,12 +2,14 @@ package com.unichristus.libraryapi.domain.book;
 
 import com.unichristus.libraryapi.domain.book.exception.BookIsbnConflict;
 import com.unichristus.libraryapi.domain.book.exception.BookNotFoundException;
+import com.unichristus.libraryapi.domain.category.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -17,7 +19,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public Page<Book> findAll(Pageable pageable) {
-        return bookRepository.findBooksByHasPdfTrue(pageable);
+        return bookRepository.findBooksByAvailableTrueAndHasPdfTrue(pageable);
     }
 
     public Book findBookByIdOrThrow(UUID bookId) {
@@ -29,7 +31,8 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book createBook(String title, String isbn, Integer numberOfPages, LocalDate publicationDate, String coverUrl) {
+    public Book createBook(String title, String isbn, Integer numberOfPages, LocalDate publicationDate, String coverUrl,
+                           Set<Category> categories) {
         validateISBNUnique(isbn);
         Book book = Book.builder()
                 .title(title)
@@ -37,11 +40,12 @@ public class BookService {
                 .isbn(isbn)
                 .numberOfPages(numberOfPages)
                 .publicationDate(publicationDate)
+                .categories(categories)
                 .build();
         return save(book);
     }
 
-    public void updateBook(UUID bookId, String title, String isbn, Integer numberOfPages, LocalDate publicationDate) {
+    public void updateBook(UUID bookId, String title, String isbn, Integer numberOfPages, LocalDate publicationDate, Boolean available) {
         Book book = findBookByIdOrThrow(bookId);
         boolean changed = false;
         if (title != null && !title.equals(book.getTitle())) {
@@ -61,6 +65,10 @@ public class BookService {
             book.setPublicationDate(publicationDate);
             changed = true;
         }
+        if (available != null && !available.equals(book.isAvailable())) {
+            book.setAvailable(available);
+            changed = true;
+        }
         if (changed) {
             save(book);
         }
@@ -74,5 +82,21 @@ public class BookService {
 
     public void deleteBookById(UUID bookId) {
         bookRepository.delete(findBookByIdOrThrow(bookId));
+    }
+
+    public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
+        return bookRepository.findBooksByCategory(category, pageable);
+    }
+
+    public Book addCategoriesToBook(UUID bookId, Set<Category> categories) {
+        Book book = findBookByIdOrThrow(bookId);
+        book.getCategories().addAll(categories);
+        return bookRepository.save(book);
+    }
+
+    public Book removeCategoriesFromBook(UUID bookId, Set<Category> categories) {
+        Book book = findBookByIdOrThrow(bookId);
+        book.getCategories().removeAll(categories);
+        return bookRepository.save(book);
     }
 }

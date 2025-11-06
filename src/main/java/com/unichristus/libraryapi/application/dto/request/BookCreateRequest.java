@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 public record BookCreateRequest(
         @NotBlank
@@ -25,6 +27,8 @@ public record BookCreateRequest(
         LocalDate publicationDate,
 
         @NotBlank
-        String coverUrl
+        String coverUrl,
+
+        List<UUID> categories
 ) {
 }

@@ -7,10 +7,14 @@ import com.unichristus.libraryapi.application.dto.response.BookResponse;
 import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
+import com.unichristus.libraryapi.domain.category.Category;
+import com.unichristus.libraryapi.domain.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @UseCase
@@ -18,6 +22,7 @@ import java.util.UUID;
 public class BookUseCase {
 
     private final BookService bookService;
+    private final CategoryService categoryService;
 
     public Page<BookResponse> getAllBooks(Pageable pageable) {
         Page<Book> books = bookService.findAll(pageable);
@@ -25,12 +30,19 @@ public class BookUseCase {
     }
 
     public BookResponse createBook(BookCreateRequest request) {
+        Set<Category> categories = new HashSet<>();
+        if (request.categories() != null && !request.categories().isEmpty()) {
+            categories = categoryService.findCategoriesByIds(request.categories());
+        }
+
         Book createdBook = bookService.createBook(
                 request.title(),
                 request.isbn(),
                 request.numberOfPages(),
                 request.publicationDate(),
-                request.coverUrl()
+                request.coverUrl(),
+                categories
+
         );
         return BookResponseMapper.toBookResponse(createdBook);
     }
@@ -41,7 +53,8 @@ public class BookUseCase {
                 request.title(),
                 request.isbn(),
                 request.numberOfPages(),
-                request.publicationDate()
+                request.publicationDate(),
+                request.available()
         );
     }
 

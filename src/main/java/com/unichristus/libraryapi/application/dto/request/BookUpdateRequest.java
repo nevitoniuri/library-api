@@ -16,6 +16,8 @@ public record BookUpdateRequest(
 
         @Past
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        LocalDate publicationDate
+        LocalDate publicationDate,
+
+        Boolean available
 ) {
 }

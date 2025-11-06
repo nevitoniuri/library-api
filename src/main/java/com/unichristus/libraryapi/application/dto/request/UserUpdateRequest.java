@@ -9,7 +9,7 @@ public record UserUpdateRequest(
         @Email
         String email,
 
-        @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
+        @Size(min = 6, max = 64)
         String password
 ) {
 }

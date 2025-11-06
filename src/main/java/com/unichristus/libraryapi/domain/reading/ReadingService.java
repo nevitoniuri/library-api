@@ -1,7 +1,6 @@
 package com.unichristus.libraryapi.domain.reading;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.reading.exception.*;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +16,14 @@ import java.util.UUID;
 public class ReadingService {
 
     private final ReadingRepository readingRepository;
-    private final BookService bookService;
 
     public Reading findByIdOrThrow(UUID readingId) throws ReadingNotFoundException {
         return readingRepository.findById(readingId)
                 .orElseThrow(() -> new ReadingNotFoundException(readingId));
+    }
+
+    public Reading save(Reading reading) {
+        return readingRepository.save(reading);
     }
 
     public List<Reading> findReadingsByUser(UUID userId) {
@@ -40,8 +42,7 @@ public class ReadingService {
         return readingRepository.findReadingWithStatus(userId, book, ReadingStatus.IN_PROGRESS);
     }
 
-    public Reading findReadingInProgressOrCreateReading(UUID userId, UUID bookId) {
-        Book book = bookService.findBookByIdOrThrow(bookId);
+    public Reading findReadingInProgressOrCreateReading(UUID userId, Book book) {
         return findReadindInProgress(userId, book)
                 .orElseGet(() -> createReading(userId, book));
     }
