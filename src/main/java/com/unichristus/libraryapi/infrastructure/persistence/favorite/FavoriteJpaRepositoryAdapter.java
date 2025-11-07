@@ -18,8 +18,8 @@ public class FavoriteJpaRepositoryAdapter implements FavoriteRepository {
     private final FavoriteJpaRepository favoriteJpaRepository;
 
     @Override
-    public void save(Favorite favorite) {
-        favoriteJpaRepository.save(favorite);
+    public Favorite save(Favorite favorite) {
+        return favoriteJpaRepository.save(favorite);
     }
 
     @Override

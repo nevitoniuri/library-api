@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface FavoriteRepository {
 
-    void save(Favorite favorite);
+    Favorite save(Favorite favorite);
 
     Page<Favorite> findAll(Pageable pageable);
 

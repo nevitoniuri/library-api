@@ -5,6 +5,7 @@ import com.unichristus.libraryapi.application.dto.response.FavoriteResponse;
 import com.unichristus.libraryapi.application.mapper.FavoriteResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
+import com.unichristus.libraryapi.domain.favorite.Favorite;
 import com.unichristus.libraryapi.domain.favorite.FavoriteService;
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +33,11 @@ public class FavoriteBookUseCase {
                 .map(FavoriteResponseMapper::toFavoriteResponse);
     }
 
-    public void favoriteBook(UUID bookId, UUID userId) {
+    public FavoriteResponse favoriteBook(UUID bookId, UUID userId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
         User user = User.builder().id(userId).build();
-        favoriteService.createFavorite(book, user);
+        Favorite favorite = favoriteService.createFavorite(book, user);
+        return FavoriteResponseMapper.toFavoriteResponse(favorite);
     }
 
     public void unfavoriteBook(UUID bookId, UUID userId) {

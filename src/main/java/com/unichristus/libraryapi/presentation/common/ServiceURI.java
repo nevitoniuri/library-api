@@ -3,7 +3,7 @@ package com.unichristus.libraryapi.presentation.common;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public final class ServiceURIs {
+public final class ServiceURI {
 
     //API Paths
     private static final String V1 = "/v1";

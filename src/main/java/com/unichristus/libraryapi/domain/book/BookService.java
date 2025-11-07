@@ -40,6 +40,7 @@ public class BookService {
                 .isbn(isbn)
                 .numberOfPages(numberOfPages)
                 .publicationDate(publicationDate)
+                .available(true)
                 .categories(categories)
                 .build();
         return save(book);

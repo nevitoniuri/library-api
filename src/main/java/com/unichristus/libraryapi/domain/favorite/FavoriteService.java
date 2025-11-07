@@ -29,7 +29,7 @@ public class FavoriteService {
         return favoriteRepository.existsByUserAndBook(userId, book);
     }
 
-    public void createFavorite(Book book, User user) {
+    public Favorite createFavorite(Book book, User user) {
         if (isFavorite(book, user.getId())) {
             throw new FavoriteAlreadyExistsException(user.getId(), book.getId());
         }
@@ -37,7 +37,7 @@ public class FavoriteService {
                 .user(user)
                 .book(book)
                 .build();
-        favoriteRepository.save(favorite);
+        return favoriteRepository.save(favorite);
     }
 
     public void unfavoriteBook(Book book, UUID userId) {
