@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public final class ReviewResponseMapper {
 
     public static ReviewResponse toReviewResponse(Review review) {
+        if (review == null) return null;
         return ReviewResponse.builder()
                 .id(review.getId())
                 .bookId(review.getBook().getId())
@@ -22,6 +23,7 @@ public final class ReviewResponseMapper {
     }
 
     public static BookAverageScoreResponse toBookAverageScoreResponse(BookAverageScore bookAverageScore) {
+        if (bookAverageScore == null) return null;
         return new BookAverageScoreResponse(
                 bookAverageScore.bookId(),
                 bookAverageScore.averageRating(),

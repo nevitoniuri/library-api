@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 public final class FavoriteResponseMapper {
 
     public static FavoriteResponse toFavoriteResponse(Favorite favorite) {
+        if (favorite == null) return null;
         return new FavoriteResponse(
-                favorite.getBook() != null ? favorite.getBook().getId() : null,
-                favorite.getBook() != null ? favorite.getBook().getTitle() : null,
-                favorite.getBook() != null ? favorite.getBook().getIsbn() : null,
+                favorite.getBook().getId(),
+                favorite.getBook().getTitle(),
+                favorite.getBook().getIsbn(),
                 favorite.getCreatedAt()
         );
     }

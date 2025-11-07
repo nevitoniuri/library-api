@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public final class CategoryResponseMapper {
 
     public static CategoryResponse toResponse(Category category) {
+        if (category == null) return null;
         return new CategoryResponse(
                 category.getId(),
                 category.getName(),

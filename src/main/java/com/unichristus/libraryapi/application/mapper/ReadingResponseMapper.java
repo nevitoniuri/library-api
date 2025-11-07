@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public final class ReadingResponseMapper {
 
     public static ReadingHomeResponse toReadingHomeResponse(Reading reading, boolean favorite) {
+        if (reading == null) return null;
         return ReadingHomeResponse.builder()
                 .id(reading.getId())
                 .book(new BookHomeResponse(reading.getBook().getId(), reading.getBook().getTitle(), favorite))
@@ -25,6 +26,7 @@ public final class ReadingResponseMapper {
     }
 
     public static ReadingResponse toReadingResponse(Reading reading) {
+        if (reading == null) return null;
         return ReadingResponse.builder()
                 .id(reading.getId())
                 .book(BookResponseMapper.toBookResponse(reading.getBook()))

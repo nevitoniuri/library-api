@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public final class BookResponseMapper {
 
     public static BookResponse toBookResponse(Book book) {
+        if (book == null) return null;
         return BookResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -20,6 +21,7 @@ public final class BookResponseMapper {
     }
 
     public static BookPdfResponse toBookPdfResponse(Book book, String pdfUrl) {
+        if (book == null) return null;
         return BookPdfResponse.builder()
                 .id(book.getId())
                 .title(book.getTitle())
