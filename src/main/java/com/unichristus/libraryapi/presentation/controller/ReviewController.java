@@ -30,13 +30,25 @@ public class ReviewController {
 
     private final ReviewUseCase reviewUseCase;
 
-    @Operation(summary = "Listar avaliações recentes", description = "Lista todas as avaliações com paginação e filtros opcionais")
+    @Operation(summary = "Listar minhas avaliações", description = "Lista todas as avaliações do usuário logado com paginação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de avaliações do usuário retornada com sucesso")
+    })
+    @GetMapping("/me")
+    public Page<ReviewResponse> getMyReviews(
+            @LoggedUser UUID userId,
+            Pageable pageable
+    ) {
+        return reviewUseCase.getUserReviews(userId, pageable);
+    }
+
+    @Operation(summary = "Listar avaliações", description = "Lista todas as avaliações com paginação e filtros opcionais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de avaliações retornada com sucesso")
     })
     @GetMapping
-    public Page<ReviewResponse> getAllReviews(@LoggedUser UUID userId, Pageable pageable) {
-        return reviewUseCase.getAllReviews(userId, pageable);
+    public Page<ReviewResponse> getAllReviews(Pageable pageable) {
+        return reviewUseCase.findReviews(pageable);
     }
 
     @Operation(summary = "Obter pontuações médias dos livros", description = "Retorna a média de avaliações de todos os livros ou de livros específicos")

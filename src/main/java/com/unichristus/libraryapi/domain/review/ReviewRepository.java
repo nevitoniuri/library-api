@@ -2,26 +2,41 @@ package com.unichristus.libraryapi.domain.review;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ReviewRepository {
+public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
-    Optional<Review> findById(UUID reviewId);
+    @Query("""
+            SELECT new com.unichristus.libraryapi.domain.review.BookAverageScore(
+                r.book.id,
+                AVG(CAST(r.rating AS double)),
+                COUNT(r)
+            )
+            FROM Review r
+            WHERE r.book.id IN :bookIds
+            GROUP BY r.book.id, r.book.title
+            """)
+    List<BookAverageScore> findAverageScoresByBookIds(@Param("bookIds") List<UUID> bookIds);
 
-    Review save(Review review);
-
-    void deleteById(UUID reviewId);
-
-    Page<Review> findByUserId(UUID userId, Pageable pageable);
-
-    Page<Review> findAll(Pageable pageable);
-
-    List<BookAverageScore> findAverageScoresByBookIds(List<UUID> bookIds);
-
-    Optional<BookAverageScore> findAverageScoresByBookId(UUID bookId);
+    @Query("""
+            SELECT new com.unichristus.libraryapi.domain.review.BookAverageScore(
+                r.book.id,
+                AVG(CAST(r.rating AS double)),
+                COUNT(r)
+            )
+            FROM Review r
+            WHERE r.book.id = :bookId
+            GROUP BY r.book.id, r.book.title
+            """)
+    Optional<BookAverageScore> findAverageScoreByBookId(@Param("bookId") UUID bookId);
 
     Optional<Review> findByUserIdAndBookId(UUID userId, UUID bookId);
+
+    Page<Review> findByUserId(UUID userId, Pageable pageable);
 }

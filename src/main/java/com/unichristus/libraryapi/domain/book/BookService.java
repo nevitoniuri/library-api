@@ -18,7 +18,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Page<Book> findAll(Pageable pageable) {
+    public Page<Book> findAllAvailable(Pageable pageable) {
         return bookRepository.findBooksByAvailableTrueAndHasPdfTrue(pageable);
     }
 
@@ -86,7 +86,7 @@ public class BookService {
     }
 
     public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
-        return bookRepository.findBooksByCategory(category, pageable);
+        return bookRepository.findBooksByCategoryId(category.getId(), pageable);
     }
 
     public Book addCategoriesToBook(UUID bookId, Set<Category> categories) {

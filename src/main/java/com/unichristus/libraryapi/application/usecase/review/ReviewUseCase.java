@@ -18,7 +18,9 @@ import com.unichristus.libraryapi.domain.review.exception.ReviewNotAllowedExcept
 import com.unichristus.libraryapi.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.UUID;
@@ -74,15 +76,23 @@ public class ReviewUseCase {
         reviewService.deleteById(reviewId);
     }
 
-    public Page<ReviewResponse> getAllReviews(UUID userId, Pageable pageable) {
-        Page<Review> reviews;
+    public Page<ReviewResponse> getUserReviews(UUID userId, Pageable pageable) {
+        pageable = getCreatedAtPageable(pageable);
+        Page<Review> reviews = reviewService.findByUserId(userId, pageable);
+        return reviews.map(ReviewResponseMapper::toReviewResponse);
+    }
 
-        if (userId != null) {
-            reviews = reviewService.findByUserId(userId, pageable);
-        } else {
-            reviews = reviewService.findAll(pageable);
-        }
+    private static PageRequest getCreatedAtPageable(Pageable pageable) {
+        return PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+    }
 
+    public Page<ReviewResponse> findReviews(Pageable pageable) {
+        pageable = getCreatedAtPageable(pageable);
+        Page<Review> reviews = reviewService.findAll(pageable);
         return reviews.map(ReviewResponseMapper::toReviewResponse);
     }
 

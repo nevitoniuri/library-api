@@ -25,7 +25,7 @@ public class BookUseCase {
     private final CategoryService categoryService;
 
     public Page<BookResponse> getAllBooks(Pageable pageable) {
-        Page<Book> books = bookService.findAll(pageable);
+        Page<Book> books = bookService.findAllAvailable(pageable);
         return books.map(BookResponseMapper::toBookResponse);
     }
 

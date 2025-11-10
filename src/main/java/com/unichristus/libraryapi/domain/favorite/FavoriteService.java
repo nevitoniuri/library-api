@@ -26,7 +26,7 @@ public class FavoriteService {
     }
 
     public boolean isFavorite(Book book, UUID userId) {
-        return favoriteRepository.existsByUserAndBook(userId, book);
+        return favoriteRepository.existsByUserIdAndBook(userId, book);
     }
 
     public Favorite createFavorite(Book book, User user) {

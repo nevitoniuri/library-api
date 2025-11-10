@@ -1,6 +1,7 @@
 package com.unichristus.libraryapi.application.mapper;
 
 import com.unichristus.libraryapi.application.dto.response.BookAverageScoreResponse;
+import com.unichristus.libraryapi.application.dto.response.ReviewHomeResponse;
 import com.unichristus.libraryapi.application.dto.response.ReviewResponse;
 import com.unichristus.libraryapi.domain.review.BookAverageScore;
 import com.unichristus.libraryapi.domain.review.Review;
@@ -28,6 +29,15 @@ public final class ReviewResponseMapper {
                 bookAverageScore.bookId(),
                 bookAverageScore.averageRating(),
                 bookAverageScore.totalReviews()
+        );
+    }
+
+    public static ReviewHomeResponse toReviewHomeResponse(Review review) {
+        if (review == null) return null;
+        return new ReviewHomeResponse(
+                review.getBook().getTitle(),
+                review.getBook().getCoverUrl(),
+                review.getRating()
         );
     }
 }
