@@ -72,7 +72,7 @@ public class BookAdminController {
         bookPdfUseCase.uploadBookPdf(bookId, file);
     }
 
-    @Operation(summary = "Deletar um livro", description = "Deleta um livro existente do sistema")
+    @Operation(summary = "Deletar um livro", description = "Delete lõgico de um livro existente do sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Livro deletado com sucesso"),
             @ApiResponse(responseCode = "401", description = "Não autorizado"),
@@ -81,7 +81,7 @@ public class BookAdminController {
     })
     @DeleteMapping("{bookId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable UUID bookId) {
-        bookUseCase.deleteBook(bookId);
+    public void invalidateBook(@PathVariable UUID bookId) {
+        bookUseCase.invalidateBook(bookId);
     }
 }

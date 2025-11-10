@@ -42,15 +42,15 @@ public class UserAdminController {
         return userUseCase.getAllUsers(pageable);
     }
 
-    @Operation(summary = "Remover usuário por ID (admin)")
+    @Operation(summary = "Invalidar usuário por ID (admin)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Usuário invalidado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable UUID userId) {
-        userUseCase.deleteUser(userId);
+    public void invalidateUser(@PathVariable UUID userId) {
+        userUseCase.invalidateUser(userId);
     }
 }
 

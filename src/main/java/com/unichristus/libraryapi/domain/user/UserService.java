@@ -63,8 +63,9 @@ public class UserService {
         }
     }
 
-    public void deleteUserById(UUID userId) {
-        userRepository.delete(findUserByIdOrThrow(userId));
+    public void invalidateUser(User user) {
+        user.setActive(false);
+        userRepository.save(user);
     }
 
     private void validateEmailUnique(String email) {

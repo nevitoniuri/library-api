@@ -58,7 +58,8 @@ public class BookUseCase {
         );
     }
 
-    public void deleteBook(UUID bookId) {
-        bookService.deleteBookById(bookId);
+    public void invalidateBook(UUID bookId) {
+        Book book = bookService.findBookByIdOrThrow(bookId);
+        bookService.invalidateBook(book);
     }
 }

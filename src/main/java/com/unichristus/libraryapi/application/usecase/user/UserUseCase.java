@@ -31,7 +31,8 @@ public class UserUseCase {
         return userService.findAll(pageable).map(UserResponseMapper::toUserResponse);
     }
 
-    public void deleteUser(UUID userId) {
-        userService.deleteUserById(userId);
+    public void invalidateUser(UUID userId) {
+        User user = userService.findUserByIdOrThrow(userId);
+        userService.invalidateUser(user);
     }
 }

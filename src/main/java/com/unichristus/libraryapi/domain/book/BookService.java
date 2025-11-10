@@ -81,8 +81,9 @@ public class BookService {
         }
     }
 
-    public void deleteBookById(UUID bookId) {
-        bookRepository.delete(findBookByIdOrThrow(bookId));
+    public void invalidateBook(Book book) {
+        book.setAvailable(false);
+        bookRepository.save(book);
     }
 
     public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
