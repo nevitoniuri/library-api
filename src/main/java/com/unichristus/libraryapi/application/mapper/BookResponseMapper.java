@@ -17,6 +17,9 @@ public final class BookResponseMapper {
                 .isbn(book.getIsbn())
                 .numberOfPages(book.getNumberOfPages())
                 .publicationDate(book.getPublicationDate())
+                .categories(book.getCategories().stream()
+                        .map(CategoryResponseMapper::toLowResponse)
+                        .toList())
                 .build();
     }
 
@@ -29,6 +32,9 @@ public final class BookResponseMapper {
                 .numberOfPages(book.getNumberOfPages())
                 .publicationDate(book.getPublicationDate())
                 .pdfUrl(pdfUrl)
+                .categories(book.getCategories().stream()
+                        .map(CategoryResponseMapper::toLowResponse)
+                        .toList())
                 .build();
     }
 

@@ -12,7 +12,7 @@ public record CategoryRequest(
         String name,
 
         @Size(max = 500)
-        @Schema(description = "Descrição da categoria", example = "Livros de ficção científica e futurismo")
+        @Schema(description = "Descrição da categoria", example = "Livros de ficção científica e futurismo", nullable = true)
         String description
 ) {
 }

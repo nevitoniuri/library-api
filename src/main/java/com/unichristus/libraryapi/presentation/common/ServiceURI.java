@@ -23,8 +23,9 @@ public final class ServiceURI {
     public static final String CATEGORIES_RESOURCE = BASE_API + "/categories";
 
     //Admin Paths
-    private static final String ADMIN = API + "/admin";
+    public static final String ADMIN = API + "/admin";
     public static final String ADMIN_USERS = ADMIN + USERS;
     public static final String BOOKS_ADMIN = ADMIN + BOOKS;
     public static final String FAVORITES_ADMIN = ADMIN + "/favorites";
+    public static final String CATEGORIES_ADMIN = ADMIN + "/categories";
 }

@@ -15,7 +15,7 @@ public record ReviewUpdateRequest(
         Integer rating,
 
         @Size(min = 3, max = 1000)
-        @Schema(description = "Comentário sobre o livro (opcional)", example = "Excelente livro, recomendo!")
+        @Schema(description = "Comentário sobre o livro (opcional)", example = "Excelente livro, recomendo!", nullable = true)
         String comment
 ) {
 }

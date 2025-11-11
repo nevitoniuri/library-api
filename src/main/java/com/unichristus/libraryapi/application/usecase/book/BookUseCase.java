@@ -48,13 +48,18 @@ public class BookUseCase {
     }
 
     public void updateBook(UUID bookId, BookUpdateRequest request) {
+        Set<Category> categories = new HashSet<>();
+        if (request.categories() != null && !request.categories().isEmpty()) {
+            categories = categoryService.findCategoriesByIds(request.categories());
+        }
         bookService.updateBook(
                 bookId,
                 request.title(),
                 request.isbn(),
                 request.numberOfPages(),
                 request.publicationDate(),
-                request.available()
+                request.available(),
+                categories
         );
     }
 

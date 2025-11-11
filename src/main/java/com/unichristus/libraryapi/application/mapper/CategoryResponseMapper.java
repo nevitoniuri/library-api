@@ -1,5 +1,6 @@
 package com.unichristus.libraryapi.application.mapper;
 
+import com.unichristus.libraryapi.application.dto.response.CategoryLowResponse;
 import com.unichristus.libraryapi.application.dto.response.CategoryResponse;
 import com.unichristus.libraryapi.domain.category.Category;
 import lombok.AccessLevel;
@@ -17,6 +18,15 @@ public final class CategoryResponseMapper {
                 category.getActive(),
                 category.getCreatedAt(),
                 category.getUpdatedAt()
+        );
+    }
+
+    public static CategoryLowResponse toLowResponse(Category category) {
+        if (category == null) return null;
+        return new CategoryLowResponse(
+                category.getId(),
+                category.getName(),
+                category.getDescription()
         );
     }
 }

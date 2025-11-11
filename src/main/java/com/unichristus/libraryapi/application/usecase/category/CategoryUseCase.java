@@ -57,7 +57,7 @@ public class CategoryUseCase {
     }
 
     public void deleteCategory(UUID categoryId) {
-        categoryService.deactivate(categoryId);
+        categoryService.deleteCategory(categoryId);
     }
 
     public Page<BookResponse> getBooksByCategory(UUID categoryId, Pageable pageable) {

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder
@@ -14,4 +15,5 @@ public class BookResponse {
     private String isbn;
     private Integer numberOfPages;
     private LocalDate publicationDate;
+    private List<CategoryLowResponse> categories;
 }

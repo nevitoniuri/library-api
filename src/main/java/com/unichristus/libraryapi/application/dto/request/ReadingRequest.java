@@ -9,7 +9,7 @@ import java.util.UUID;
 @Schema(description = "Dados para criar/atualizar uma leitura")
 public record ReadingRequest(
         @NotNull
-        @Schema(description = "ID do livro a ser lido", example = "123e4567-e89b-12d3-a456-426614174000")
+        @Schema(description = "ID do livro lido", example = "123e4567-e89b-12d3-a456-426614174000")
         UUID bookId,
 
         @NotNull

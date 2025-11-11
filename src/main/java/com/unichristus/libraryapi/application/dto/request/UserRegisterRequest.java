@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@Schema(description = "Dados para registro de um novo usuário")
 public record UserRegisterRequest(
         @NotBlank
         @Size(min = 3, max = 100)

@@ -24,10 +24,6 @@ public class CategoryService {
         return categoryRepository.findByActiveTrue();
     }
 
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
-    }
-
     public Category save(Category category) {
         // Verifica se já existe uma categoria com o mesmo nome (exceto a própria)
         categoryRepository.findByNameIgnoreCase(category.getName())
@@ -39,10 +35,9 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public void deactivate(UUID categoryId) {
+    public void deleteCategory(UUID categoryId) {
         Category category = findByIdOrThrow(categoryId);
-        category.setActive(false);
-        categoryRepository.save(category);
+        categoryRepository.delete(category);
     }
 
     public Set<Category> findCategoriesByIds(List<UUID> categoryIds) {

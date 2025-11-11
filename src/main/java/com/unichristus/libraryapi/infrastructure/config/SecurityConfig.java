@@ -2,9 +2,11 @@ package com.unichristus.libraryapi.infrastructure.config;
 
 import com.unichristus.libraryapi.infrastructure.security.JwtAuthenticationFilter;
 import com.unichristus.libraryapi.infrastructure.security.Role;
+import com.unichristus.libraryapi.presentation.common.ServiceURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,12 +34,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/**").hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(ServiceURI.ADMIN + "/**").hasAuthority(Role.ADMIN.name())
                         .requestMatchers(
-                                "/api/v1/auth/**",
+                                ServiceURI.AUTH_RESOURCE + "/login",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, ServiceURI.USERS_RESOURCE).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

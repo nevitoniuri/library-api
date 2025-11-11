@@ -46,7 +46,7 @@ public class BookService {
         return save(book);
     }
 
-    public void updateBook(UUID bookId, String title, String isbn, Integer numberOfPages, LocalDate publicationDate, Boolean available) {
+    public void updateBook(UUID bookId, String title, String isbn, Integer numberOfPages, LocalDate publicationDate, Boolean available, Set<Category> categories) {
         Book book = findBookByIdOrThrow(bookId);
         boolean changed = false;
         if (title != null && !title.equals(book.getTitle())) {
@@ -70,6 +70,10 @@ public class BookService {
             book.setAvailable(available);
             changed = true;
         }
+        if (categories != null && !categories.equals(book.getCategories())) {
+            book.setCategories(categories);
+            changed = true;
+        }
         if (changed) {
             save(book);
         }
@@ -88,17 +92,5 @@ public class BookService {
 
     public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
         return bookRepository.findBooksByCategoryId(category.getId(), pageable);
-    }
-
-    public Book addCategoriesToBook(UUID bookId, Set<Category> categories) {
-        Book book = findBookByIdOrThrow(bookId);
-        book.getCategories().addAll(categories);
-        return bookRepository.save(book);
-    }
-
-    public Book removeCategoriesFromBook(UUID bookId, Set<Category> categories) {
-        Book book = findBookByIdOrThrow(bookId);
-        book.getCategories().removeAll(categories);
-        return bookRepository.save(book);
     }
 }
