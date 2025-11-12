@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Tag(name = "[Admin] Users", description = "Operações administrativas de usuários")
+@Tag(name = "[Admin]", description = "Operações administrativas da API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ServiceURI.ADMIN_USERS)

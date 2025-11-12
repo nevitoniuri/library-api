@@ -25,8 +25,8 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    public void deleteById(UUID reviewId) {
-        reviewRepository.deleteById(reviewId);
+    public void delete(Review review) {
+        reviewRepository.delete(review);
     }
 
     public Page<Review> findByUserId(UUID userId, Pageable pageable) {
@@ -41,8 +41,12 @@ public class ReviewService {
         return reviewRepository.findByUserIdAndBookId(userId, bookId);
     }
 
-    public List<BookAverageScore> findAverageScoresByBookIds(List<UUID> bookIds) {
-        return reviewRepository.findAverageScoresByBookIds(bookIds);
+    public List<BookAverageRating> getAverageReviewsByBookIds(List<UUID> bookIds) {
+        return reviewRepository.getAverageReviewsByBookIds(bookIds);
+    }
+
+    public Optional<BookAverageRating> getAverageReviewsByBookId(UUID bookId) {
+        return reviewRepository.getAverageReviewsByBookId(bookId);
     }
 }
 

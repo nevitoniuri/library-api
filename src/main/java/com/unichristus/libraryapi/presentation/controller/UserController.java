@@ -65,8 +65,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateMe(
             @LoggedUser UUID userId,
-            @RequestBody @Valid UserUpdateRequest requestDto
+            @RequestBody @Valid UserUpdateRequest request
     ) {
-        userUseCase.updateUser(userId, requestDto);
+        userUseCase.updateUser(userId, request);
     }
 }

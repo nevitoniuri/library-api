@@ -2,7 +2,6 @@ package com.unichristus.libraryapi.presentation.controller;
 
 import com.unichristus.libraryapi.application.dto.request.ReviewCreateRequest;
 import com.unichristus.libraryapi.application.dto.request.ReviewUpdateRequest;
-import com.unichristus.libraryapi.application.dto.response.BookAverageScoreResponse;
 import com.unichristus.libraryapi.application.dto.response.ReviewResponse;
 import com.unichristus.libraryapi.application.usecase.review.ReviewUseCase;
 import com.unichristus.libraryapi.infrastructure.security.LoggedUser;
@@ -19,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Reviews", description = "Operações com avaliações de livros")
@@ -49,17 +47,6 @@ public class ReviewController {
     @GetMapping
     public Page<ReviewResponse> getAllReviews(Pageable pageable) {
         return reviewUseCase.findReviews(pageable);
-    }
-
-    @Operation(summary = "Obter pontuações médias dos livros", description = "Retorna a média de avaliações de todos os livros ou de livros específicos")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pontuações médias retornadas com sucesso")
-    })
-    @GetMapping("/average")
-    public List<BookAverageScoreResponse> getAverageScores(
-            @RequestParam(required = false) List<UUID> bookIds
-    ) {
-        return reviewUseCase.getAverageScores(bookIds);
     }
 
     @Operation(summary = "Obter detalhes de uma avaliação específica")

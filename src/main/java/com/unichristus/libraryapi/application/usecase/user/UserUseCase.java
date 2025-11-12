@@ -43,8 +43,8 @@ public class UserUseCase {
         return UserResponseMapper.toUserResponse(savedUser);
     }
 
-    public void updateUser(UUID userId, UserUpdateRequest dto) {
-        userService.updateUser(userId, dto.name(), dto.email(), dto.password());
+    public void updateUser(UUID userId, UserUpdateRequest request) {
+        userService.updateUser(userId, request.name(), request.email(), request.password());
     }
 
     public Page<UserResponse> getAllUsers(Pageable pageable) {

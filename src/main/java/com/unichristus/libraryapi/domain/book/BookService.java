@@ -87,10 +87,10 @@ public class BookService {
 
     public void invalidateBook(Book book) {
         book.setAvailable(false);
-        bookRepository.save(book);
+        save(book);
     }
 
     public Page<Book> findBooksByCategory(Category category, Pageable pageable) {
-        return bookRepository.findBooksByCategoryId(category.getId(), pageable);
+        return bookRepository.findBooksByCategory(category, pageable);
     }
 }

@@ -23,7 +23,8 @@ public enum DomainError {
     READING_ALREADY_IN_PROGRESS("READING_ALREADY_IN_PROGRESS", "Já existe uma leitura em progresso para o usuário: %s e o livro: %s"),
     READING_IN_PROGRESS_NOT_FOUND("READING_IN_PROGRESS_NOT_FOUND", "Nenhuma leitura em progresso encontrada para o usuário: %s e o livro: %s"),
     READING_ALREADY_FINISHED("READING_ALREADY_FINISHED", "A Leitura já está finalizada e não pode ser atualizada: %s"),
-    READING_INVALID_PAGE_PROGRESS("READING_INVALID_PAGE_PROGRESS", "O progresso da leitura é inválido."),
+    PAGE_LOWER("PAGE_LOWER", "A página informada é menor que a página atual da leitura."),
+    PAGE_EXCEEDED("PAGE_EXCEEDED", "A página informada excede o total de páginas do livro."),
     READING_BELONGS_TO_ANOTHER_USER("READING_BELONGS_TO_ANOTHER_USER", "A leitura %s está associada a outro usuário."),
     PDF_NOT_AVAILABLE("PDF_NOT_AVAILABLE", "O livro não possui um arquivo PDF: %s"),
 
@@ -34,7 +35,7 @@ public enum DomainError {
     //REVIEWS ERRORS
     REVIEW_NOT_FOUND("REVIEW_NOT_FOUND", "Avaliação não encontrada: %s"),
     REVIEW_NOT_ALLOWED("REVIEW_NOT_ALLOWED", "Não é possível avaliar o livro."),
-    REVIEW_BELONGS_TO_ANOTHER_USER("REVIEW_BELONGS_TO_ANOTHER_USER", "A avaliação está associada a outro usuário."),
+    REVIEW_BELONGS_TO_ANOTHER_USER("REVIEW_BELONGS_TO_ANOTHER_USER", "A avaliação pertence a outro usuário."),
     REVIEW_ALREADY_EXISTS("REVIEW_ALREADY_EXISTS", "O usuário já avaliou o livro."),
 
     //CATEGORY ERRORS

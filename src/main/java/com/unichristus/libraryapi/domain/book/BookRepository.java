@@ -1,27 +1,21 @@
 package com.unichristus.libraryapi.domain.book;
 
+import com.unichristus.libraryapi.domain.category.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
+public interface BookRepository {
+
+    Book save(Book book);
+
+    Optional<Book> findById(UUID id);
 
     boolean existsBookByIsbn(String isbn);
 
     Page<Book> findBooksByAvailableTrueAndHasPdfTrue(Pageable pageable);
 
-    @Query(value = """
-            SELECT DISTINCT b.*
-            FROM books b
-            INNER JOIN book_categories bc ON b.id = bc.book_id
-            WHERE bc.category_id = :categoryId
-            AND b.available = true
-            ORDER BY b.title
-            """, nativeQuery = true)
-    Page<Book> findBooksByCategoryId(@Param("categoryId") UUID categoryId, Pageable pageable);
-
+    Page<Book> findBooksByCategory(Category category, Pageable pageable);
 }

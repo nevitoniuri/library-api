@@ -9,13 +9,14 @@ import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.category.Category;
 import com.unichristus.libraryapi.domain.category.CategoryService;
+import com.unichristus.libraryapi.domain.review.BookAverageRating;
+import com.unichristus.libraryapi.domain.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @UseCase
 @RequiredArgsConstructor
@@ -23,10 +24,19 @@ public class BookUseCase {
 
     private final BookService bookService;
     private final CategoryService categoryService;
+    private final ReviewService reviewService;
 
     public Page<BookResponse> getAllBooks(Pageable pageable) {
         Page<Book> books = bookService.findAllAvailable(pageable);
-        return books.map(BookResponseMapper::toBookResponse);
+        List<UUID> bookIds = books.map(Book::getId).toList();
+        List<BookAverageRating> averageRatings = reviewService.getAverageReviewsByBookIds(bookIds);
+
+        Map<UUID, BookAverageRating> ratingMap = averageRatings.stream()
+                .collect(Collectors.toMap(BookAverageRating::bookId, r -> r));
+        return books.map(book -> {
+            BookAverageRating averageRating = ratingMap.getOrDefault(book.getId(), new BookAverageRating(book.getId(), 0.0, 0L));
+            return BookResponseMapper.toBookListResponse(book, averageRating);
+        });
     }
 
     public BookResponse createBook(BookCreateRequest request) {

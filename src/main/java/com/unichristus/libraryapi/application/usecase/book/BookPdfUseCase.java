@@ -6,6 +6,8 @@ import com.unichristus.libraryapi.application.mapper.BookResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
 import com.unichristus.libraryapi.domain.book.BookService;
 import com.unichristus.libraryapi.domain.book.exception.BookPdfNotFoundException;
+import com.unichristus.libraryapi.domain.review.BookAverageRating;
+import com.unichristus.libraryapi.domain.review.ReviewService;
 import com.unichristus.libraryapi.infrastructure.storage.MinioFileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +19,13 @@ import java.util.UUID;
 public class BookPdfUseCase {
 
     private final BookService bookService;
+    private final ReviewService reviewService;
     private final MinioFileStorageService minioFileStorageService;
 
     public BookPdfResponse getBookWithPdf(UUID bookId) {
         Book book = bookService.findBookByIdOrThrow(bookId);
-        return BookResponseMapper.toBookPdfResponse(book, getBookPdfUrl(book));
+        BookAverageRating bookAverageRating = reviewService.getAverageReviewsByBookId(bookId).orElse(null);
+        return BookResponseMapper.toBookPdfResponse(book, getBookPdfUrl(book), bookAverageRating);
     }
 
     public String getBookPdfUrl(Book book) {

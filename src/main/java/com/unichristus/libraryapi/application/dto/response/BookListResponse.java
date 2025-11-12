@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
-public class BookPdfResponse extends BookListResponse {
-    private String pdfUrl;
+public class BookListResponse extends BookResponse {
+    private Double averageRating;
+    private Long totalReviews;
 }

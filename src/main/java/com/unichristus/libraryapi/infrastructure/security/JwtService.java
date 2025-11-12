@@ -55,7 +55,7 @@ public class JwtService {
 
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         Claims claims = extractAllClaims(token);
-
+        @SuppressWarnings("unchecked")
         List<String> roles = claims.get("roles", List.class);
         Collection<? extends GrantedAuthority> authorities =
                 roles.stream().map(SimpleGrantedAuthority::new).toList();

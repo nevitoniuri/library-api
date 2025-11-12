@@ -1,14 +1,19 @@
 package com.unichristus.libraryapi.domain.favorite;
 
 import com.unichristus.libraryapi.domain.book.Book;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface FavoriteRepository extends JpaRepository<Favorite, UUID> {
+public interface FavoriteRepository {
+
+    Favorite save(Favorite favorite);
 
     List<Favorite> findAllByUserId(UUID userId);
+
+    Page<Favorite> findAll(Pageable pageable);
 
     boolean existsByUserIdAndBook(UUID userId, Book book);
 

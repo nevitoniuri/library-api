@@ -3,7 +3,6 @@ package com.unichristus.libraryapi.application.usecase.review;
 import com.unichristus.libraryapi.application.annotation.UseCase;
 import com.unichristus.libraryapi.application.dto.request.ReviewCreateRequest;
 import com.unichristus.libraryapi.application.dto.request.ReviewUpdateRequest;
-import com.unichristus.libraryapi.application.dto.response.BookAverageScoreResponse;
 import com.unichristus.libraryapi.application.dto.response.ReviewResponse;
 import com.unichristus.libraryapi.application.mapper.ReviewResponseMapper;
 import com.unichristus.libraryapi.domain.book.Book;
@@ -22,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
 import java.util.UUID;
 
 @UseCase
@@ -73,7 +71,7 @@ public class ReviewUseCase {
     public void deleteReview(UUID reviewId, UUID userId) {
         Review existingReview = reviewService.findByIdOrThrow(reviewId);
         checkUser(userId, existingReview);
-        reviewService.deleteById(reviewId);
+        reviewService.delete(existingReview);
     }
 
     public Page<ReviewResponse> getUserReviews(UUID userId, Pageable pageable) {
@@ -94,11 +92,5 @@ public class ReviewUseCase {
         pageable = getCreatedAtPageable(pageable);
         Page<Review> reviews = reviewService.findAll(pageable);
         return reviews.map(ReviewResponseMapper::toReviewResponse);
-    }
-
-    public List<BookAverageScoreResponse> getAverageScores(List<UUID> bookIds) {
-        return reviewService.findAverageScoresByBookIds(bookIds).stream()
-                .map(ReviewResponseMapper::toBookAverageScoreResponse)
-                .toList();
     }
 }

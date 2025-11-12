@@ -21,12 +21,11 @@ public class CategoryService {
     }
 
     public List<Category> findAllActive() {
-        return categoryRepository.findByActiveTrue();
+        return categoryRepository.findAllByActiveTrue();
     }
 
     public Category save(Category category) {
-        // Verifica se já existe uma categoria com o mesmo nome (exceto a própria)
-        categoryRepository.findByNameIgnoreCase(category.getName())
+        categoryRepository.findCategoryByNameIgnoreCase(category.getName())
                 .ifPresent(existing -> {
                     if (!existing.getId().equals(category.getId())) {
                         throw new CategoryAlreadyExistsException(category.getName());

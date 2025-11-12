@@ -1,9 +1,7 @@
 package com.unichristus.libraryapi.application.mapper;
 
-import com.unichristus.libraryapi.application.dto.response.BookAverageScoreResponse;
 import com.unichristus.libraryapi.application.dto.response.ReviewHomeResponse;
 import com.unichristus.libraryapi.application.dto.response.ReviewResponse;
-import com.unichristus.libraryapi.domain.review.BookAverageScore;
 import com.unichristus.libraryapi.domain.review.Review;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,15 +19,6 @@ public final class ReviewResponseMapper {
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .build();
-    }
-
-    public static BookAverageScoreResponse toBookAverageScoreResponse(BookAverageScore bookAverageScore) {
-        if (bookAverageScore == null) return null;
-        return new BookAverageScoreResponse(
-                bookAverageScore.bookId(),
-                bookAverageScore.averageRating(),
-                bookAverageScore.totalReviews()
-        );
     }
 
     public static ReviewHomeResponse toReviewHomeResponse(Review review) {

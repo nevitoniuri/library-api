@@ -17,12 +17,7 @@ public class ReadingService {
 
     private final ReadingRepository readingRepository;
 
-    public Reading findByIdOrThrow(UUID readingId) throws ReadingNotFoundException {
-        return readingRepository.findById(readingId)
-                .orElseThrow(() -> new ReadingNotFoundException(readingId));
-    }
-
-    public Reading save(Reading reading) {
+    private Reading save(Reading reading) {
         return readingRepository.save(reading);
     }
 
@@ -31,7 +26,7 @@ public class ReadingService {
     }
 
     public Optional<Reading> findInProgressReadingByUserAndBook(UUID userId, Book book) {
-        return readingRepository.findReadingWithStatus(userId, book, ReadingStatus.IN_PROGRESS);
+        return readingRepository.findReadingByUserAndBookAndStatus(userId, book, ReadingStatus.IN_PROGRESS);
     }
 
     public boolean hasInProgressReading(UUID userId, Book book) {
@@ -39,7 +34,7 @@ public class ReadingService {
     }
 
     public Optional<Reading> findReadindInProgress(UUID userId, Book book) {
-        return readingRepository.findReadingWithStatus(userId, book, ReadingStatus.IN_PROGRESS);
+        return readingRepository.findReadingByUserAndBookAndStatus(userId, book, ReadingStatus.IN_PROGRESS);
     }
 
     public Reading findReadingInProgressOrCreateReading(UUID userId, Book book) {
@@ -63,27 +58,45 @@ public class ReadingService {
                 .startedAt(now)
                 .lastReadedAt(now)
                 .build();
-        return readingRepository.save(reading);
+        return save(reading);
     }
 
-    public void updateReadingProgress(Reading reading, Integer newCurrentPage) {
+    public void updateReadingProgress(Reading reading, Integer newPage) {
+        validateReadingNotFinished(reading);
+        validatePageProgress(reading, newPage);
+        Integer bookTotalPages = reading.getBook().getNumberOfPages();
+        if (newPage >= bookTotalPages) {
+            finishReading(reading);
+        } else {
+            reading.setCurrentPage(newPage);
+            reading.setLastReadedAt(LocalDateTime.now());
+        }
+        save(reading);
+    }
+
+    private void validateReadingNotFinished(Reading reading) {
         if (reading.getStatus() == ReadingStatus.FINISHED) {
             throw new ReadingAlreadyFinishedException(reading.getId());
         }
-        if (newCurrentPage < reading.getCurrentPage() || newCurrentPage > reading.getBook().getNumberOfPages()) {
-            throw new InvalidPageProgressException();
+    }
+
+    private void validatePageProgress(Reading reading, int newPage) {
+        int current = reading.getCurrentPage();
+        int total = reading.getBook().getNumberOfPages();
+        if (newPage < current) {
+            throw new PageLowerException();
         }
-        Integer totalPages = reading.getBook().getNumberOfPages();
+        if (newPage > total) {
+            throw new PageExceededException();
+        }
+    }
+
+    private void finishReading(Reading reading) {
         LocalDateTime now = LocalDateTime.now();
-        if (newCurrentPage >= totalPages) {
-            reading.setStatus(ReadingStatus.FINISHED);
-            reading.setCurrentPage(totalPages);
-            reading.setFinishedAt(now);
-        } else {
-            reading.setCurrentPage(newCurrentPage);
-        }
+        reading.setStatus(ReadingStatus.FINISHED);
+        reading.setCurrentPage(reading.getBook().getNumberOfPages());
+        reading.setFinishedAt(now);
         reading.setLastReadedAt(now);
-        readingRepository.save(reading);
     }
 
     public static int calculateProgressPercentage(Reading reading) {
