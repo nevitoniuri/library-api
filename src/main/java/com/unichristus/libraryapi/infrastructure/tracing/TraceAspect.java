@@ -55,7 +55,7 @@ public class TraceAspect {
         String parameters = formatParameters(paramNames, args);
 
         // Log estruturado com traceId, classe, method e parâmetros
-        log.info("{}.{}({})",
+        log.debug("{}.{}({})",
                 className,
                 methodName,
                 parameters);

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.nio.charset.StandardCharsets;
@@ -31,7 +32,8 @@ public class TraceInterceptor implements HandlerInterceptor {
         String token = getToken(request);
         String userEmail = getAuthenticatedUserEmail(token);
         String params = getParams(request);
-        log.info("Request => {} {} | User: {} | Params: {} | Token: {}",
+
+        log.debug("Request => {} {} | User: {} | Params: {} | Token: {}",
                 method,
                 uri,
                 userEmail,
@@ -49,10 +51,12 @@ public class TraceInterceptor implements HandlerInterceptor {
         }
         long elapsed = System.currentTimeMillis() - startTime.get();
         startTime.remove();
+        String requestBody = getRequestBody(request);
         String responseBody = getResponseBody(response);
-        log.info("ResponseStatus => {} | Time: {} ms | ResponseBody: {}",
+        log.debug("Response => Status: {} | Time: {} ms | RequestBody: {} | ResponseBody: {}",
                 response.getStatus(),
                 elapsed,
+                requestBody,
                 responseBody
         );
     }
@@ -80,13 +84,32 @@ public class TraceInterceptor implements HandlerInterceptor {
         return queryString != null ? queryString : "none";
     }
 
+    private String getRequestBody(HttpServletRequest request) {
+        if (request instanceof ContentCachingRequestWrapper wrapper) {
+            return extractBody(wrapper.getContentAsByteArray());
+        }
+        return "empty";
+    }
+
     private String getResponseBody(HttpServletResponse response) {
         if (response instanceof ContentCachingResponseWrapper wrapper) {
-            byte[] buf = wrapper.getContentAsByteArray();
-            if (buf.length > 0) {
-                return new String(buf, StandardCharsets.UTF_8);
-            }
+            return extractBody(wrapper.getContentAsByteArray());
         }
-        return "none";
+        return "empty";
+    }
+
+    private String extractBody(byte[] content) {
+        if (content != null && content.length > 0) {
+            String body = new String(content, StandardCharsets.UTF_8);
+            return maskPassword(body);
+        }
+        return "empty";
+    }
+
+    private String maskPassword(String body) {
+        if (body == null || body.isEmpty()) {
+            return body;
+        }
+        return body.replaceAll("(\"password\"\\s*:\\s*\")([^\"]+)(\")", "$1***$3");
     }
 }
