@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> handleDomainException(DomainException ex) {
         DomainError error = ex.getError();
-        log.error("DomainException [{}]: {}", error.getCode(), ex.getMessage());
+//        log.error("DomainException [{}]: {}", error.getCode(), ex.getMessage());
         return ResponseEntity
                 .status(HttpErrorMapper.map(error))
                 .body(new ErrorResponse(error.getCode(), ex.getMessage()));
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
-        log.error("Validation Exception: {}", ex.getMessage());
+//        log.error("Validation Exception: {}", ex.getMessage());
         List<FieldErrorResponse> fieldErrors = ex.getBindingResult().getAllErrors().stream()
                 .map(error -> {
                     String fieldName = ((org.springframework.validation.FieldError) error).getField();

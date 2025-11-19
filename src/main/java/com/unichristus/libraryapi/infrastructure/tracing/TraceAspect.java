@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,7 +33,6 @@ public class TraceAspect {
      * - @Repository
      */
     @Before("@within(org.springframework.web.bind.annotation.RestController) || " +
-            "@within(org.springframework.stereotype.Controller) || " +
             "@within(com.unichristus.libraryapi.application.annotation.UseCase) || " +
             "@within(org.springframework.stereotype.Service) || " +
             "@within(org.springframework.stereotype.Repository)")
@@ -66,20 +64,6 @@ public class TraceAspect {
     /**
      * Formata os parâmetros do method de forma legível
      */
-    private String formatParameters(Object[] args) {
-        if (args == null || args.length == 0) {
-            return "";
-        }
-        return Arrays.stream(args)
-                .map(arg -> {
-                    if (arg == null) {
-                        return "null";
-                    }
-                    return arg.toString();
-                })
-                .collect(Collectors.joining(", "));
-    }
-
     private String formatParameters(String[] paramNames, Object[] args) {
         if (args == null || args.length == 0) {
             return "";
