@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.unichristus.libraryapi.infrastructure.tracing.LoggingFilter.TRACE_ID_KEY;
+
 /**
  * Aspect que intercepta métodos das camadas Controller, Service e Repository
  * e loga automaticamente com o traceId, nome do method e parâmetros.
@@ -38,7 +40,7 @@ public class TraceAspect {
             "@within(org.springframework.stereotype.Repository)")
     public void logMethodExecution(JoinPoint joinPoint) {
         // Só loga se estiver dentro de um contexto de request HTTP
-        String traceId = MDC.get(TraceIdFilter.TRACE_ID_KEY);
+        String traceId = MDC.get(TRACE_ID_KEY);
 
         if (traceId == null) {
             // Não está em contexto HTTP, não loga

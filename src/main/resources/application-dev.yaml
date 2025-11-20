@@ -8,13 +8,12 @@ spring:
     password: ${DB_PASSWORD:858733}
     driver-class-name: org.postgresql.Driver
 
-# Logging
 logging:
   level:
     root: INFO
-    com.unichristus: DEBUG
+    com.unichristus: TRACE
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{traceId} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) [%magenta(%X{traceId})] %msg%n"
 
 # JWT Config
 jwt:
