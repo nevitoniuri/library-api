@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(of = "id")
+@ToString
 @Entity
 @Table(name = "categories")
 public class Category {
