@@ -38,7 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 ServiceURI.AUTH_RESOURCE + "/login",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, ServiceURI.USERS_RESOURCE).permitAll()
                         .anyRequest().authenticated()

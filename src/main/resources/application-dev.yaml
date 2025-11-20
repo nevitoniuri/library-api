@@ -6,14 +6,6 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/library_api}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:858733}
-    driver-class-name: org.postgresql.Driver
-
-logging:
-  level:
-    root: INFO
-    com.unichristus: TRACE
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) [%magenta(%X{traceId})] %msg%n"
 
 # JWT Config
 jwt:
@@ -22,9 +14,6 @@ jwt:
 
 # Minio
 minio:
-  url: http://localhost:9000
-  access-key: admin
-  secret-key: password123
-  bucket:
-    files: book-files
-    max-size-mb: 10
+  url: ${MINIO_URL:http://localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:admin}
+  secret-key: ${MINIO_SECRET_KEY:password123}
